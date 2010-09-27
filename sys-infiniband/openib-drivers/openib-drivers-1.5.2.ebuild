@@ -12,10 +12,10 @@ MY_P="OFED-${PV}"
 S="${WORKDIR}/ofa_kernel-${PV}"
 
 LICENSE="|| ( GPL-2 BSD-2 )"
-SLOT="0"
+SLOT="2.6.32-1.5"
 
 KEYWORDS="~x86 ~amd64"
-IUSE="memtrack hpage-patch srp ipath iser ehca mlx4 rds madeye vnic cxgb3 debug"
+IUSE="memtrack hpage-patch srp ipath iser ehca mlx4 rds madeye cxgb3 debug"
 
 RDEPEND=""
 PDEPEND="=sys-infiniband/openib-files-${PV}"
@@ -35,11 +35,17 @@ src_unpack() {
     unpack ${A} || die "unpack failed"
     rpm_unpack ./${MY_P}/SRPMS/ofa_kernel-${PV}-OFED.${PV}..src.rpm
     tar xzf ofa_kernel-${PV}.tgz
-    # remove patches that failed for me:
-    rm "${S}/kernel_patches/backport/2.6.32/mlx4_semaphore_include.patch" \
-       "${S}/kernel_patches/backport/2.6.32/net_skb-dst_accessors.patch" \
-       "${S}/kernel_patches/backport/2.6.32/new_frags_interface.patch" \
-       || die "Cannot find patch to delete. Please update list."
+
+    # These patches are malformed in the released archive. They have been
+    # re-downloaded from Linus' gitweb (and stripped of non-existing files)
+    _patches=("net_skb-dst_accessors.patch" "new_frags_interface.patch")
+    for _patch in ${_patches[*]}; do
+        rm "${S}/kernel_patches/backport/2.6.32/${_patch}"
+        cp "${FILESDIR}/${_patch}" "${S}/kernel_patches/backport/2.6.32/${_patch}"
+    done
+
+    # Unneeded:
+    rm "${S}/kernel_patches/backport/2.6.32/mlx4_semaphore_include.patch"
 }
 
 make_target() {
@@ -85,7 +91,6 @@ src_compile() {
 			     $(use_with mlx4)-mod
 			     $(use_with rds)-mod
 			     $(use_with madeye)-mod
-			     $(use_with vnic)-mod
 			     $(use_with cxgb3)-mod"
 	if use debug; then
 		CONF_PARAMS="$CONF_PARAMS
@@ -94,7 +99,6 @@ src_compile() {
 					 --with-sdp_debug-mod
 					 $(use_with srp)_debug-mod
 					 $(use_with rds)_debug-mod
-					 $(use_with vnic)_debug-mod
 					 $(use_with mlx4)_debug-mod
 					 $(use_with cxgb3)_debug-mod"
 	else
@@ -123,10 +127,17 @@ src_install() {
 
 	make_target DESTDIR="${D}" install
 
-	insinto /usr/include/rdma
-	doins "${S}/include/rdma/*.h"
-	insinto /usr/include/scsi
-	doins "${S}/include/scsi/*.h"
+    insinto /usr/include/rdma
+    cd ${S}/include/rdma
+    for f in *.h; do
+        doins ${f}
+    done
+
+    insinto /usr/include/scsi
+    cd ${S}/include/scsi
+    for f in *.h; do
+        doins ${f}
+    done
 
 }
 
