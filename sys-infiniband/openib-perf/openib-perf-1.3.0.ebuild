@@ -13,7 +13,7 @@ DESCRIPTION="OpenIB uverbs micro-benchmarks"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND=">=sys-infiniband/libibverbs-1.1.2
+DEPEND=">=sys-infiniband/libibverbs-1.1.4
 		>=sys-infiniband/librdmacm-1.0.8"
 
 src_unpack() {
