@@ -12,7 +12,7 @@ KEYWORDS="~x86 ~amd64"
 DESCRIPTION="MVAPICH2 MPI-over-infiniband package auto-configured for OpenIB."
 
 HOMEPAGE="http://mvapich.cse.ohio-state.edu/"
-SRC_URI="${HOMEPAGE}/download/mvapich2/mvapich2-${PV/_/-}.tar.gz"
+SRC_URI="${HOMEPAGE}/download/mvapich2/mvapich2-${PV/_/}.tgz"
 
 S="${WORKDIR}/mvapich2-${PV/_/-}"
 
