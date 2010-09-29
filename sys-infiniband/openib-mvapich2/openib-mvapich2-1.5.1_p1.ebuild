@@ -14,7 +14,7 @@ DESCRIPTION="MVAPICH2 MPI-over-infiniband package auto-configured for OpenIB."
 HOMEPAGE="http://mvapich.cse.ohio-state.edu/"
 SRC_URI="${HOMEPAGE}/download/mvapich2/mvapich2-${PV/_/}.tgz"
 
-S="${WORKDIR}/mvapich2-${PV/_/-}"
+S="${WORKDIR}/mvapich2-${PV/_/}"
 
 IUSE="debug medium-cluster large-cluster rdma romio threads fortran"
 
