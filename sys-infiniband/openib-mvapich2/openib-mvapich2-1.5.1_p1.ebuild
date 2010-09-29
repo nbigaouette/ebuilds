@@ -131,7 +131,7 @@ src_configure() {
 	cd ${S/-beta2/}
 
 	! mpi_classed && c="${c} --sysconfdir=/etc/${PN}"
-	econf $(mpi_econf_args)	${c}
+	econf $(mpi_econf_args) ${c}
 }
 
 src_compile() {
