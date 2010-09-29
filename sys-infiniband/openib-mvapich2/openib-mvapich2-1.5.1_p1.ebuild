@@ -144,7 +144,7 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${D}" install || die
-	mpi_dodoc CHANGES_MPICH2 COPYRIGHT COPYRIGHT_MVAPICH2 LICENSE.TXT \
+	mpi_dodoc CHANGELOG_MPICH2 COPYRIGHT LICENSE.TXT \
 		README* RELEASE_NOTES*
 	mpi_imp_add_eselect
 }
