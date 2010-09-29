@@ -132,14 +132,14 @@ src_configure() {
 
 	! mpi_classed && c="${c} --sysconfdir=/etc/${PN}"
 	econf $(mpi_econf_args)	${c}
-
-	# http://www.mcs.anl.gov/research/projects/mpich2/support/index.php?s=faqs#parmake
-	# https://trac.mcs.anl.gov/projects/mpich2/ticket/297
-	emake -j1 || die
 }
 
 src_compile() {
-
+    # https://trac.mcs.anl.gov/projects/mpich2/ticket/297
+    # https://trac.mcs.anl.gov/projects/mpich2/ticket/711
+    if [ -f Makefile ] || [ -f GNUmakefile ] || [ -f makefile ]; then
+        emake -j1 || die "emake failed"
+    fi
 }
 
 src_install() {
