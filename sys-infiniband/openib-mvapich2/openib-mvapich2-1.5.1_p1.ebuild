@@ -75,14 +75,14 @@ src_unpack() {
 }
 
 src_configure() {
-    #--with-device=osu_ch3:mrail
-	local c="--with-rdma=gen2
-		--with-pm=mpd
-		$(use_enable romio)
-		--with-mpe=no"
-
-	# TODO Shared libs should build with this, but they don't
-	# --enable-shared=gcc"
+    local c=""
+    if use rdma; then
+        c="${c} --with-rdma=gen2"   #
+    fi
+    c="${c} --with-pm=mpd"          # process manager
+    c="${c} $(use_enable romio)"    # ROMIO MPI I/O implementation
+    c="${c} --disable-mpe"          # MPI Parallel Environment
+    #c="${c} --enable-sharedlibs=gcc" # Build fails with "Unrecognized argument -Wl,--as-needed"
 
 	local enable_srq
 	local vcluster=-D_SMALL_CLUSTER
@@ -122,13 +122,12 @@ src_configure() {
 	else
 		c="${c} --disable-f77 --disable-f90"
 	fi
-
 	sed -i \
 		-e 's/ ${exec_prefix}/ ${DESTDIR}${exec_prefix}/' \
 		-e 's/ ${libdir}/ ${DESTDIR}${libdir}/' \
-		${S/-beta2/}/Makefile.in
-	sed -i '/bindir/s/ ${bindir}/ ${DESTDIR}${bindir}/' ${S/-beta2/}/src/pm/mpd/Makefile.in
-	cd ${S/-beta2/}
+		${S}/Makefile.in
+	sed -i '/bindir/s/ ${bindir}/ ${DESTDIR}${bindir}/' ${S}/src/pm/mpd/Makefile.in
+	cd ${S}
 
 	! mpi_classed && c="${c} --sysconfdir=/etc/${PN}"
 	econf $(mpi_econf_args) ${c}
