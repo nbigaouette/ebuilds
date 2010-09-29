@@ -5,6 +5,7 @@
 inherit mpi fortran flag-o-matic
 
 SLOT="0"
+EAPI=2
 LICENSE="BSD"
 
 KEYWORDS="~x86 ~amd64"
