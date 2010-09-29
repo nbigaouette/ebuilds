@@ -70,12 +70,12 @@ src_unpack() {
 	# Examples are always compiled with the default 'all' target.  This
 	# causes problems when we don't build support for everything, including
 	# threads, mpe2, etc.  So we're not going to build them.
-	sed -i 's:.*cd examples && ${MAKE} all.*::' Makefile.in
+	sed -i 's:.*cd examples && ${MAKE} all.*::' Makefile.in || die "sed failed"
 }
 
 src_compile() {
-	local c="--with-device=osu_ch3:mrail
-		--with-rdma=gen2
+    #--with-device=osu_ch3:mrail
+	local c="--with-rdma=gen2
 		--with-pm=mpd
 		$(use_enable romio)
 		--with-mpe=no"
