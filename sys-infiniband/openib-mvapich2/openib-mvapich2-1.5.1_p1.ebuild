@@ -74,7 +74,7 @@ src_unpack() {
 	sed -i 's:.*cd examples && ${MAKE} all.*::' Makefile.in || die "sed failed"
 }
 
-src_compile() {
+src_configure() {
     #--with-device=osu_ch3:mrail
 	local c="--with-rdma=gen2
 		--with-pm=mpd
@@ -136,6 +136,9 @@ src_compile() {
 	# http://www.mcs.anl.gov/research/projects/mpich2/support/index.php?s=faqs#parmake
 	# https://trac.mcs.anl.gov/projects/mpich2/ticket/297
 	emake -j1 || die
+}
+
+src_compile() {
 
 }
 
