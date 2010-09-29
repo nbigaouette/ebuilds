@@ -17,6 +17,12 @@ DEPEND=">=sys-infiniband/libibverbs-1.1.4"
 RDEPEND="${DEPEND}
 		!sys-infiniband/openib-userspace"
 
+src_unpack() {
+    unpack ${A} || die "unpack failed"
+    rpm_unpack "./OFED-${OFED_VER}/SRPMS/${MY_PN}-${MY_PV}-${OFED_SUFFIX}.src.rpm"
+    unpack ./${MY_PN}-${MY_PV}-${OFED_SUFFIX}.${EXT}
+}
+
 src_install() {
 	make DESTDIR="${D}" install || die "install failed"
 	dodoc README AUTHORS ChangeLog
