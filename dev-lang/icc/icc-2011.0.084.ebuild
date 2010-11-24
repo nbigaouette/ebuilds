@@ -132,6 +132,11 @@ src_install() {
 		dosym ../../common/com.intel.debugger.help_1.0.0 \
 		${DESTINATION}/idb/gui/${IARCH}/plugins
 
+    # Normally handled by the install script. Modify them ourselves.
+    grep -rl "<INSTALLDIR>"      ${ED}${DESTINATION}/* | xargs sed -i "s|<INSTALLDIR>|/${DESTINATION}|g"    || die "Can't sed for <INSTALLDIR>!!!"
+    grep -rl "<PRODDIR>"         ${ED}${DESTINATION}/* | xargs sed -i "s|<PRODDIR>|/${DESTINATION}|g"       || die "Can't sed for <PRODDIR>!!!"
+    grep -rl "PROD_DIR/pkg_bin/" ${ED}${DESTINATION}/* | xargs sed -i "s|PROD_DIR/pkg_bin/|PROD_DIR/bin/|g" || die "Can't sed for PROD_DIR/pkg_bin/!!!"
+
 	if use eclipse; then
 		if has_version 'dev-util/eclipse-sdk:3.4'; then
 			link_eclipse_plugins "3.4" "5.0" || die
