@@ -39,6 +39,8 @@ pkg_setup() {
 }
 
 src_prepare() {
+    # Why is that necessary??
+    cd ${PN}-${PV/_/-}
     epatch ${FILESDIR}/valgrind-${P}.patch
 	# use system cfortran
 	rm -f fortran/cfortran.h || die
