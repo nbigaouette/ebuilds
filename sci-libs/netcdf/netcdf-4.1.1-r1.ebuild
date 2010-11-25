@@ -38,7 +38,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-    epatch ${FILESDIR}/valgrind-${P}.patch
+    epatch ${FILESDIR}/valgrind-${PF}.patch
 	# use system cfortran
 	rm -f fortran/cfortran.h || die
 }
