@@ -44,14 +44,14 @@ src_prepare() {
 }
 
 src_configure() {
+    # Why is that necessary??
+    cd ${PN}-${PV/_/-}
+
 	local myconf
 	if use hdf5; then
 		myconf="--with-hdf5=${EPREFIX}/usr --with-zlib=${EPREFIX}/usr"
 		use szip && myconf="${myconf} --with-szlib=${EPREFIX}/usr"
 	fi
-
-    # Why is that necessary??
-    cd ${PN}-${PV/_/-}
 
 	econf \
 		--enable-shared \
@@ -70,6 +70,9 @@ src_configure() {
 }
 
 src_compile() {
+    # Why is that necessary??
+    cd ${PN}-${PV/_/-}
+
 	# hack to allow parallel build
 	if use doc; then
 		emake pdf || die "emake pdf failed"
@@ -80,7 +83,17 @@ src_compile() {
 	emake || die "emake failed"
 }
 
+src_test() {
+    # Why is that necessary??
+    cd ${PN}-${PV/_/-}
+
+    make check || die "At least one test failed"
+}
+
 src_install() {
+    # Why is that necessary??
+    cd ${PN}-${PV/_/-}
+
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc README RELEASE_NOTES VERSION || die
 }
