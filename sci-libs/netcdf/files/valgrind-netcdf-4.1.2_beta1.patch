@@ -1,0 +1,24 @@
+From 00386c709fff09c97804fe0efa087a3e01680e00 Mon Sep 17 00:00:00 2001
+From: Nicolas Bigaouette <nbigaouette@gmail.com>
+Date: Thu, 25 Nov 2010 17:54:01 -0500
+Subject: [PATCH 2/2] Might fix valgrind error.
+
+---
+ cxx/netcdf.cpp |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/cxx/netcdf.cpp b/cxx/netcdf.cpp
+index 6cb0e74..68d341e 100644
+--- a/cxx/netcdf.cpp
++++ b/cxx/netcdf.cpp
+@@ -1448,6 +1448,7 @@ NcVar::NcVar(NcFile* nc, int id)
+    : NcTypedComponent(nc), the_id(id)
+ {
+     char nam[NC_MAX_NAME];
++    memset(nam, 0, NC_MAX_NAME*sizeof(char));
+     if (the_file 
+ 	&& NcError::set_err(
+ 			    nc_inq_varname(the_file->id(), the_id, nam)
+-- 
+1.7.3.2
+
