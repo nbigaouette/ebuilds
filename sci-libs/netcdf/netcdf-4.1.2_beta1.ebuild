@@ -17,6 +17,7 @@ KEYWORDS="alpha amd64 hppa ia64 ~mips ~ppc ppc64 sparc x86 ~amd64-linux ~x86-lin
 
 RDEPEND="
 	hdf5? ( >=sci-libs/hdf5-1.8[zlib,szip?,fortran?] )
+	valgrind? ( sci-libs/hdf5[valgrind] )
 	dap? ( net-misc/curl )
 "
 DEPEND="${RDEPEND}
@@ -48,9 +49,9 @@ src_configure() {
 		myconf="--with-hdf5=${EPREFIX}/usr --with-zlib=${EPREFIX}/usr"
 		use szip && myconf="${myconf} --with-szlib=${EPREFIX}/usr"
 	fi
-	if use valgrind && ! has_version sci-libs/hdf5[valgrind]; then
-        die -q "sci-libs/hdf5 must have \"valgrind\" use flag."
-    fi
+
+    # Why is that necessary??
+    cd ${PN}-${PV/_/-}
 
 	econf \
 		--enable-shared \
