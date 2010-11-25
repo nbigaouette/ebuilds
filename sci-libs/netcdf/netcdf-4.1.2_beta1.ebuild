@@ -13,7 +13,7 @@ HOMEPAGE="http://www.unidata.ucar.edu/software/netcdf/"
 LICENSE="UCAR-Unidata"
 SLOT="0"
 IUSE="dap doc fortran hdf5 static-libs szip cxx valgrind"
-KEYWORDS="alpha amd64 hppa ia64 ~mips ~ppc ppc64 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos"
+KEYWORDS="~amd64 ~x86"
 
 RDEPEND="
 	hdf5? ( >=sci-libs/hdf5-1.8[zlib,szip?,fortran?] )
