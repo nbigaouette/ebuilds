@@ -84,13 +84,6 @@ src_compile() {
 	emake || die "emake failed"
 }
 
-src_test() {
-    # Why is that necessary??
-    cd ${PN}-${PV/_/-}
-
-    make check || die "At least one test failed"
-}
-
 src_install() {
     # Why is that necessary??
     cd ${PN}-${PV/_/-}
