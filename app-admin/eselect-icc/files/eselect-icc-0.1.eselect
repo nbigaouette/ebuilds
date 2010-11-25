@@ -2,60 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id: $
 
-# inherit skel
-# MODULE="ICFC"
-# IFACE="icfc"
-
 DESCRIPTION="Manages different Intel C/C++ compiler (icc) installations"
 MAINTAINER="nbigaouette@gmail.com"
 SVN_DATE='$Date: $'
 VERSION="0.1"
 
-# var_from_user_envd(){
-#     [ ! -f ${user_ev_sh} ] && return 0
-#     echo "$(source ${user_ev_sh}; echo ${!1})"
-# }
-#
-# describe_unset() {
-#     echo "Restore icc-less environment"
-# }
-#
-# do_unset() {
-#     local lld current_imp
-#     init
-#
-#     current_imp="$(var_from_user_envd ESELECT_ICFC)"
-#
-#     if [ -z "${current_imp}" ]; then
-#         echo "No implemention currently in use.  This is a no-op."
-#         return
-#     fi
-#
-#     global_env "${ESELECT_MPI_IMP}"
-#     lld="$(load_config ${ev} LD_LIBRARY_PATH)"
-#
-#    # PATH and MANPATH are reset in /etc/profile.
-# cat <<-EOF > ${user_ev_sh}
-# unset ESELECT_MPI_IMP
-# l=\`expr "\${LD_LIBRARY_PATH}:" : ".*${lld}:"\`
-# l=\$(( \${l} + 1 ))
-#
-# if [ \${l} -gt 1 ]; then
-#     export LD_LIBRARY_PATH="\`expr substr \${LD_LIBRARY_PATH} \${l} 1024\`"
-# fi
-# EOF
-#
-# cat <<-EOF > ${user_ev_csh}
-# unsetenv ESELECT_MPI_IMP
-# set l=\`expr "\${LD_LIBRARY_PATH}:" : ".*${lld}:"\`
-# @ l = ( \${l} + 1 )
-#
-# if ( \${l} > 1 ) \
-#     setenv LD_LIBRARY_PATH "\`expr substr \${LD_LIBRARY_PATH} \${l} 1024\`"
-# EOF
-#
-#    echo "Remember to source /etc/profile or /etc/csh.login"
-# }
 
 inherit path-manipulation config
 
