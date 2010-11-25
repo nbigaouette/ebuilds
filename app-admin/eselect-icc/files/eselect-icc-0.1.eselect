@@ -1,0 +1,306 @@
+# Copyright 1999-2005 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Id: $
+
+# inherit skel
+# MODULE="ICFC"
+# IFACE="icfc"
+
+DESCRIPTION="Manages different Intel C/C++ compiler (icc) installations"
+MAINTAINER="nbigaouette@gmail.com"
+SVN_DATE='$Date: $'
+VERSION="0.1"
+
+# var_from_user_envd(){
+#     [ ! -f ${user_ev_sh} ] && return 0
+#     echo "$(source ${user_ev_sh}; echo ${!1})"
+# }
+#
+# describe_unset() {
+#     echo "Restore icc-less environment"
+# }
+#
+# do_unset() {
+#     local lld current_imp
+#     init
+#
+#     current_imp="$(var_from_user_envd ESELECT_ICFC)"
+#
+#     if [ -z "${current_imp}" ]; then
+#         echo "No implemention currently in use.  This is a no-op."
+#         return
+#     fi
+#
+#     global_env "${ESELECT_MPI_IMP}"
+#     lld="$(load_config ${ev} LD_LIBRARY_PATH)"
+#
+#    # PATH and MANPATH are reset in /etc/profile.
+# cat <<-EOF > ${user_ev_sh}
+# unset ESELECT_MPI_IMP
+# l=\`expr "\${LD_LIBRARY_PATH}:" : ".*${lld}:"\`
+# l=\$(( \${l} + 1 ))
+#
+# if [ \${l} -gt 1 ]; then
+#     export LD_LIBRARY_PATH="\`expr substr \${LD_LIBRARY_PATH} \${l} 1024\`"
+# fi
+# EOF
+#
+# cat <<-EOF > ${user_ev_csh}
+# unsetenv ESELECT_MPI_IMP
+# set l=\`expr "\${LD_LIBRARY_PATH}:" : ".*${lld}:"\`
+# @ l = ( \${l} + 1 )
+#
+# if ( \${l} > 1 ) \
+#     setenv LD_LIBRARY_PATH "\`expr substr \${LD_LIBRARY_PATH} \${l} 1024\`"
+# EOF
+#
+#    echo "Remember to source /etc/profile or /etc/csh.login"
+# }
+
+inherit path-manipulation config
+
+# Based on empi's eselect.mpi-0.7
+# The basic idea is we want to allow every use to select their own icfc
+# implementation they want, and a ${HOME}/.env.d/icfc file created for them.
+#   A user then is -required- to source the env file.  This sets PATH, MANPATH,
+# and LD_LIBRARY_PATH.  I'm sure I'm forgetting something here.
+# Calling unset only wipes out the env file, replacing it with what we
+# previously added stripped out.
+
+# List the valid icfc classes currently installed.
+find_profiles() {
+    local profiles
+    for f in ${ROOT}/etc/env.d/icfc/*; do
+        [[ -f ${f} ]] || continue
+        f=$(basename ${f})
+        [[ "${f#icfc-}" == "${f}" ]] && continue
+        profiles=(${profiles[@]} ${f})
+    done
+    echo ${profiles[@]}
+}
+
+# User's current environment has the class configured in it.
+is_in_use() { [ "${ESELECT_ICFC}" == "${1}" ]; }
+
+# User's env file is ready for sourcing for this class
+is_enabled() {
+    [ "$(var_from_user_envd ESELECT_ICFC)" == "${1}" ]
+}
+
+var_from_user_envd(){
+    [ ! -f ${user_ev_sh} ] && return 0
+    echo "$(source ${user_ev_sh}; echo ${!1})"
+}
+
+# Is this a valid class?
+is_profile() {
+    local profiles=$(find_profiles)
+    for i in ${profiles[@]}; do
+        [[ "${i}" == "${1}" ]] && return 0
+    done
+    return 1
+}
+
+init() {
+    local d
+    [[ ${UID} -eq 0 ]] && HOME="${ROOT}/root"
+    d="$(canonicalise "${ROOT}/${HOME}")"
+    d="${d}/.env.d/"
+    user_ev_sh="${d}icfc.sh";
+    user_ev_csh="${d}icfc.csh";
+
+    if [[ ! -d "${d}" ]]; then
+        mkdir "${d}" || die -q "Failed to create ${d}."
+    elif [[ ! -w "${d}" ]]; then
+        die -q "You do not have permission to mkdir ${d}."
+    fi
+    [[ -f "${user_ev_sh}" && ! -w "${user_ev_sh}" \
+        && -f "${user_ev_csh}" && ! -w "${user_ev_csh}" ]] \
+        && die -q "You do not have permission to write to ${user_ev_sh} or ${user_ev_csh}."
+}
+
+global_env() {
+    local d=$(canonicalise "${ROOT}/etc/env.d/icfc/${1}")
+    [ -z "${d}" ] && die "Cannot find global env file for ${1}"
+    ev=${d}
+}
+
+### list action ###
+
+describe_list() {  echo "List available profiles"; }
+describe_list_parameters() { echo "[-p]"; }
+
+do_list() {
+    profiles=( $(find_profiles) )
+    init
+    if [[ ${@} == *-p* ]]; then
+        echo "${profiles[@]}"
+    else
+        write_list_start "Available ICFC profiles:"
+        if [[ -n "${profiles[@]}" ]]; then
+            for (( i=0; i<${#profiles[@]}; i++ )); do
+                if is_in_use ${profiles[$i]} && is_enabled ${profiles[$i]}; then
+                    write_kv_list_entry "${profiles[$i]}" "Enabled, In Use"
+                elif is_in_use ${profiles[$i]}; then
+                    write_kv_list_entry "${profiles[$i]}" "In Use"
+                elif is_enabled ${profiles[$i]}; then
+                    write_kv_list_entry "${profiles[$i]}" "Enabled"
+                else
+                    write_kv_list_entry "${profiles[$i]}" "--"
+                fi
+            done
+        else
+            write_kv_list_entry "(none found)" ""
+        fi
+    fi
+    return 0
+}
+
+
+### set action ###
+
+describe_set() {
+    echo "Select an ICFC profile."
+}
+
+describe_set_parameters() {
+    echo "<target>"
+}
+
+do_set() {
+    local binpath lld manpath current_imp
+
+    init
+    current_imp="$(var_from_user_envd ESELECT_ICFC)"
+    global_env ${1}
+
+    [[ -z ${1} ]] && die -q "You didnt specifiy any profile for use."
+    [[ ${#@} -ne 1 ]] && die -q "You may only select exactly one profile."
+    ! is_profile ${1} && die -q "${1} is not an profile."
+    if is_enabled ${1}; then
+        echo "${1} implemention is currently in use. Please disable it first using \"eselect icc unset\""
+        return
+    elif [ -n "${current_imp}" ]; then
+        echo "Cannot select ${1} when ${current_imp} is in use."
+        return 1
+    fi
+
+    ICFC_FILE="$(load_config ${ev} ICFC_FILE)"
+    ICFC_ARCH="$(load_config ${ev} ICFC_ARCH)"
+
+    cat <<-EOF >${user_ev_sh}
+source ${ICFC_FILE} ${ICFC_ARCH}
+export ESELECT_ICFC="${1}"
+EOF
+
+    cat <<-EOF >${user_ev_csh}
+source ${ICFC_FILE} ${ICFC_ARCH}
+setenv ESELECT_ICFC "${1}"
+EOF
+
+    echo "Remember to source /etc/profile or /etc/csh.login:"
+    echo "source /etc/profile && source ~/.bashrc"
+}
+
+
+### unset action ###
+describe_unset() {
+    echo "Restore ICFC-less environment."
+}
+
+do_unset() {
+    local lld current_imp
+    init
+
+    current_imp="$(var_from_user_envd ESELECT_ICFC)"
+
+    if [ -z "${current_imp}" ]; then
+        echo "No implemention currently in use."
+        return
+    fi
+
+    global_env "${ESELECT_ICFC}"
+    lld="$(load_config ${ev} LD_LIBRARY_PATH)"
+
+   # PATH and MANPATH are reset in /etc/profile.
+cat <<-EOF > ${user_ev_sh}
+unset ESELECT_ICFC
+l=\`expr "\${LD_LIBRARY_PATH}:" : ".*${lld}:"\`
+l=\$(( \${l} + 1 ))
+
+if [ \${l} -gt 1 ]; then
+    export LD_LIBRARY_PATH="\`expr substr \${LD_LIBRARY_PATH} \${l} 1024\`"
+fi
+EOF
+
+cat <<-EOF > ${user_ev_csh}
+unsetenv ESELECT_ICFC
+set l=\`expr "\${LD_LIBRARY_PATH}:" : ".*${lld}:"\`
+@ l = ( \${l} + 1 )
+
+if ( \${l} > 1 ) \
+    setenv LD_LIBRARY_PATH "\`expr substr \${LD_LIBRARY_PATH} \${l} 1024\`"
+EOF
+
+    echo "Remember to source /etc/profile or /etc/csh.login:"
+    echo "source /etc/profile && source ~/.bashrc"
+}
+
+### add action (from skel pretty much)
+describe_add() {
+    echo "Add a new icfc profile."
+}
+
+describe_add_parameters() {
+    echo "<file> <architecture>"
+}
+
+do_add() {
+    local profile
+    [[ ${#@} -ne 3 ]] \
+        && die -q "Bad arguments, use:  icfc add <profile_name> /opt/intel/.../bin/iccvars.sh <intel64/ia32>"
+
+    # If $D is set, we're adding from portage so we want to respect sandbox.
+    # Otherwise, respect the ROOT variable.
+    local PREFIX=${D:-${ROOT}/}
+
+    name="${1}"
+    file="${2}"
+    architecture="${3}"
+    profiled="${PREFIX}etc/env.d/icfc"
+
+    [[ "${name/-*/}" != "icfc" ]] && die "Name MUST start with 'icfc-'"
+
+    # Create directory if necessary
+    if [[ ! -e ${profiled} ]]; then
+        mkdir -p ${profiled} || die "Creating ${profiled} failed!"
+    else
+        if [[ ! -d ${profiled} ]]; then
+            die -q "${profiled} exists but isn't a directory!"
+        fi
+    fi
+
+    ICFC_FILE=${file}
+    ICFC_ARCH=${architecture}
+    cat > ${profiled}/${name} << EOF
+ICFC_FILE=${ICFC_FILE}
+ICFC_ARCH=${ICFC_ARCH}
+EOF
+    [ $? == 0 ] || die "Creating ${profiled}/${name} failed!"
+}
+
+
+### printvar action ###
+describe_printvar() { echo "Print variables stored in global env.d file."; }
+describe_printvar_parameters() { echo "<profile> <variable>"; }
+
+do_printvar() {
+    if [[ ${#@} -ne 2 ]] \
+        || ! is_profile ${1}; then
+        die -q "Specify exactly 1 class and 1 variable."
+    fi
+    global_env ${1}
+    echo "$(load_config ${ev} ${2})"
+}
+
+# -*-eselect-*-  vim: ft=eselect
