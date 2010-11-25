@@ -222,7 +222,8 @@ do_add() {
     architecture="${3}"
     profiled="${PREFIX}etc/env.d/icfc"
 
-    [[ "${name/-*/}" != "icfc" ]] && die "Name MUST start with 'icfc-'"
+    [[ "${name/-*/}" != "icfc" ]] && die -q "Name MUST start with 'icfc-'"
+    [[ ! -f "${file}" ]]          && die -q "File \"${file}\" does not exists!"
 
     # Create directory if necessary
     if [[ ! -e ${profiled} ]]; then
