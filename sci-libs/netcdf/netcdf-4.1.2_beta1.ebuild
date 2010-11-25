@@ -39,6 +39,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+    epatch ${FILESDIR}/0001-Fix-valgrind-error.patch
 	# use system cfortran
 	rm -f fortran/cfortran.h || die
 }
