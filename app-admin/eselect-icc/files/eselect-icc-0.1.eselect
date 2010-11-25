@@ -224,6 +224,7 @@ do_add() {
 
     [[ "${name/-*/}" != "icfc" ]] && die -q "Name MUST start with 'icfc-'"
     [[ ! -f "${file}" ]]          && die -q "File \"${file}\" does not exists!"
+    is_profile ${name}            && die -q "Profile \"${name}\" already exists!"
 
     # Create directory if necessary
     if [[ ! -e ${profiled} ]]; then
