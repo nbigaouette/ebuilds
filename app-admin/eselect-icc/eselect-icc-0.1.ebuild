@@ -1,3 +1,4 @@
+# See bug #346723 (https://bugs.gentoo.org/show_bug.cgi?id=346723)
 
 DESCRIPTION="Manages different Intel C/C++ compiler (icc) installations"
 HOMEPAGE="http://www.intel.com/software/products/compilers/clin/"
