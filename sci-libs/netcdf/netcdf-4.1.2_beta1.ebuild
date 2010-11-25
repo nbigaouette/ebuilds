@@ -7,7 +7,7 @@ EAPI="3"
 inherit eutils
 
 DESCRIPTION="Scientific library and interface for array oriented data access"
-SRC_URI="ftp://ftp.unidata.ucar.edu/pub/netcdf/${P}.tar.gz"
+SRC_URI="ftp://ftp.unidata.ucar.edu/pub/netcdf/${P/_/-}.tar.gz"
 HOMEPAGE="http://www.unidata.ucar.edu/software/netcdf/"
 
 LICENSE="UCAR-Unidata"
