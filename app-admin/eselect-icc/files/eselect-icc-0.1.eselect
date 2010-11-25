@@ -211,6 +211,8 @@ do_add() {
     [[ ${#@} -ne 3 ]] \
         && die -q "Bad arguments, use:  icfc add <profile_name> /opt/intel/.../bin/iccvars.sh <intel64/ia32>"
 
+    [[ "${EUID}" != "0" ]] && die -q "Must be run as root!"
+
     # If $D is set, we're adding from portage so we want to respect sandbox.
     # Otherwise, respect the ROOT variable.
     local PREFIX=${D:-${ROOT}/}
