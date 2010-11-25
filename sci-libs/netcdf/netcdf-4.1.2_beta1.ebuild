@@ -12,7 +12,7 @@ HOMEPAGE="http://www.unidata.ucar.edu/software/netcdf/"
 
 LICENSE="UCAR-Unidata"
 SLOT="0"
-IUSE="dap doc fortran hdf5 static-libs szip cxx"
+IUSE="dap doc fortran hdf5 static-libs szip cxx valgrind"
 KEYWORDS="alpha amd64 hppa ia64 ~mips ~ppc ppc64 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos"
 
 RDEPEND="
@@ -48,6 +48,9 @@ src_configure() {
 		myconf="--with-hdf5=${EPREFIX}/usr --with-zlib=${EPREFIX}/usr"
 		use szip && myconf="${myconf} --with-szlib=${EPREFIX}/usr"
 	fi
+	if use valgrind && ! has_version sci-libs/hdf5[valgrind]; then
+        die -q "sci-libs/hdf5 must have \"valgrind\" use flag."
+    fi
 
 	econf \
 		--enable-shared \
@@ -60,7 +63,8 @@ src_configure() {
 		$(use_enable fortran separate-fortran) \
 		$(use_enable hdf5 netcdf-4) \
 		$(use_enable hdf5 ncgen4) \
-		$(use_enable doc docs-install) \
+        $(use_enable doc docs-install) \
+        $(use_enable valgrind valgrind-tests) \
 		${myconf}
 }
 
