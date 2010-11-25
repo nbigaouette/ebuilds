@@ -15,8 +15,8 @@ PID=1959
 DESCRIPTION="Intel compiler suite for Linux"
 HOMEPAGE="http://www.intel.com/software/products/compilers/clin/"
 SRC_COM="http://registrationcenter-download.intel.com/akdlm/irc_nas/${PID}/${PACKAGEID}"
-SRC_URI="amd64? ( ${SRC_COM/PKGARCH/intel64}.tgz ) "
-	#x86?  ( ${SRC_COM/PKGARCH/ia32}.tgz )"
+SRC_URI="amd64? ( ${SRC_COM/PKGARCH/intel64}.tgz )
+	x86?  ( ${SRC_COM/PKGARCH/ia32}.tgz )"
 	#ia64? ( ${SRC_COM/PKGARCH/ia64}.tgz )
 
 LICENSE="Intel-SDP"
@@ -115,19 +115,20 @@ src_install() {
 	#	|| die "Copying ${PN} failed"
     mv ${DESTINATION}/* "${ED}"/${DESTINATION}/ || die "Copying ${PN} failed"
 
-	local envf=05icfc-${SLOT}
-	cat > ${envf} <<-EOF
-		PATH="${EROOT}${DESTINATION}/bin/${IARCH}"
-		ROOTPATH="${EROOT}${DESTINATION}/bin/${IARCH}"
-		LDPATH="${EROOT}${DESTINATION}/lib/${IARCH}"
-		LIBRARY_PATH="${EROOT}${DESTINATION}/lib/${IARCH}"
-		NLSPATH="${EROOT}${DESTINATION}/lib/locale/en_US/%N"
-		MANPATH="${EROOT}${DESTINATION}/man/en_US"
-	EOF
-	if [[ ! -e "${EROOT}"etc/env.d/${envf} ]] ||
-		[[ -n $(diff "${EROOT}"etc/env.d/${envf} ./${envf}) ]]; then
-		doenvd ${envf} || die "doenvd ${envf} failed"
-	fi
+    # Should be set using eselect-icc
+# 	local envf=05icfc-${SLOT}
+# 	cat > ${envf} <<-EOF
+# 		PATH="${EROOT}${DESTINATION}/bin/${IARCH}"
+# 		ROOTPATH="${EROOT}${DESTINATION}/bin/${IARCH}"
+# 		LDPATH="${EROOT}${DESTINATION}/lib/${IARCH}"
+# 		LIBRARY_PATH="${EROOT}${DESTINATION}/lib/${IARCH}"
+# 		NLSPATH="${EROOT}${DESTINATION}/lib/locale/en_US/%N"
+# 		MANPATH="${EROOT}${DESTINATION}/man/en_US"
+# 	EOF
+# 	if [[ ! -e "${EROOT}"etc/env.d/${envf} ]] ||
+# 		[[ -n $(diff "${EROOT}"etc/env.d/${envf} ./${envf}) ]]; then
+# 		doenvd ${envf} || die "doenvd ${envf} failed"
+# 	fi
 	[[ -d ${DESTINATION}/idb ]] && \
 		dosym ../../common/com.intel.debugger.help_1.0.0 \
 		${DESTINATION}/idb/gui/${IARCH}/plugins
