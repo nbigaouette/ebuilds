@@ -21,7 +21,7 @@ RDEPEND="${DEPEND}"
 RESTRICT="mirror strip"
 
 _libaticaldir=${WORKDIR}/archive_files/arch/x86/usr/lib
-[ "$CARCH" = "x86_64" ] && _libaticaldir=${WORKDIR}/archive_files/arch/x86_64/usr/lib64
+[ "$ARCH" = "amd64" ] && _libaticaldir=${WORKDIR}/archive_files/arch/x86_64/usr/lib64
 
 src_unpack() {
     /bin/sh ${DISTDIR}/ati-driver-installer-${PV/./-}-x86.x86_64.run --extract archive_files
