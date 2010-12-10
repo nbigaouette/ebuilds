@@ -83,23 +83,12 @@ src_install() {
     echo ${_installdir}/lib/gpu >> amdstream.conf
 
     #More docs and export
-#     mkdir -p ${D}/etc/profile.d
-#     cd ${D}/etc/profile.d
-#     echo "#!/bin/sh" > amdstream.sh
-#     echo "export AMDSTREAMSDKROOT=${_installdir}/" >> amdstream.sh
-#     echo "export AMDSTREAMSDKSAMPLEROOT=${_installdir}/" >> amdstream.sh
     mkdir -p ${D}/etc/env.d
     echo "AMDSTREAMSDKROOT=${_installdir}/" >> ${D}/etc/env.d/99amdstream
     echo "AMDSTREAMSDKSAMPLEROOT=${_installdir}/" >> ${D}/etc/env.d/99amdstream
     echo "LDPATH=${_installdir}/lib/${_arch}" >> ${D}/etc/env.d/99amdstream
     echo "PATH=${_installdir}/bin/${_arch}" >> ${D}/etc/env.d/99amdstream
-
-    # FIXME: Libraries
-    mkdir -p ${D}/usr/lib
-    cd ${D}${_installdir}/lib/${_arch}
-    for f in *.so; do
-        ln -s ${_installdir}/lib/${_arch}/${f} ${D}/usr/lib/
-    done
+    echo "LIBRARY_PATH=${_installdir}/lib/x86_64" >> ${D}/etc/env.d/99amdstream
 
     #Fix modes
     find ${D}${_installdir}/ -type f -exec chmod 644 {} \;
