@@ -9,8 +9,6 @@ EAPI=3
 DESCRIPTION="AMD ATI Stream SDK, now wtih OpenCL support"
 HOMEPAGE="http://developer.amd.com/gpu/ATIStreamSDK/Pages/default.aspx"
 
-IUSE="catalyst"
-
 if [[ "${ARCH}" == "amd64" ]]; then
     _arch="x86_64"
     _other_arch="x86"
