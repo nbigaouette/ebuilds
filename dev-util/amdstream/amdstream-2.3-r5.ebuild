@@ -37,8 +37,7 @@ RDEPEND=">=dev-util/libatical-10.11
 DEPEND="${RDEPEND}
         dev-lang/perl"
 
-#RESTRICT="mirror strip"
-RESTRICT="mirror"
+RESTRICT="mirror strip"
 
 src_compile() {
     cd "${WORKDIR}/ati-stream-sdk-v${PV}-lnx${_bits}"
@@ -49,15 +48,18 @@ src_install() {
 
     cd "${WORKDIR}/ati-stream-sdk-v${PV}-lnx${_bits}"
 
+    #_installdir=/opt/amdstream
+    _installdir=/usr/share/amdstream
+
     #Install SDK
-    mkdir -p ${D}/opt/amdstream
-    cp -r {glut_notice.txt,docs,include,samples} ${D}/opt/amdstream/
-    mkdir -p ${D}/opt/amdstream/{bin/$_arch,lib,samples}
-    cp -r ./bin/$_arch/clc ${D}/opt/amdstream/bin/$_arch/clc
-    cp -r ./lib/$_arch ${D}/opt/amdstream/lib/
-    cp -r ./lib/gpu ${D}/opt/amdstream/lib/
-    rm -rf ${D}/opt/amdstream/samples/opencl/bin/$_other_arch
-    rm -rf ${D}/opt/amdstream/samples/cal/bin/$_other_arch
+    mkdir -p ${D}${_installdir}
+    cp -r {glut_notice.txt,docs,include,samples} ${D}${_installdir}/
+    mkdir -p ${D}${_installdir}/{bin/${_arch},lib,samples}
+    cp -r ./bin/${_arch}/clc ${D}${_installdir}/bin/${_arch}/clc
+    cp -r ./lib/${_arch} ${D}${_installdir}/lib/
+    cp -r ./lib/gpu ${D}${_installdir}/lib/
+    rm -rf ${D}${_installdir}/samples/opencl/bin/${_other_arch}
+    rm -rf ${D}${_installdir}/samples/cal/bin/${_other_arch}
 
     #Register ICD
     tar -zxvf icd-registration.tgz > /dev/null
@@ -71,25 +73,39 @@ src_install() {
     install -m644 ./include/OVDecode/{OVDecode.h,OVDecodeTypes.h} ${D}/usr/include/OVDecode
 
     #Symlink binaries
-    mkdir -p ${D}/usr/bin
-    ln -s /opt/amdstream/bin/$_arch/clc ${D}/usr/bin/
+    #mkdir -p ${D}/usr/bin
+    #ln -s ${_installdir}/bin/${_arch}/clc ${D}/usr/bin/
 
     #Add stream libs to shared library path
     mkdir -p ${D}/etc/ld.so.conf.d
     cd ${D}/etc/ld.so.conf.d
-    echo /opt/amdstream/lib/$_arch > amdstream.conf
-    echo /opt/amdstream/lib/gpu >> amdstream.conf
+    echo ${_installdir}/lib/${_arch} > amdstream.conf
+    echo ${_installdir}/lib/gpu >> amdstream.conf
 
     #More docs and export
-    mkdir -p ${D}/etc/profile.d
-    cd ${D}/etc/profile.d
-    echo "#!/bin/sh" > amdstream.sh
-    echo "export AMDSTREAMSDKROOT=/opt/amdstream/" >> amdstream.sh
-    echo "export AMDSTREAMSDKSAMPLEROOT=/opt/amdstream/" >> amdstream.sh
+#     mkdir -p ${D}/etc/profile.d
+#     cd ${D}/etc/profile.d
+#     echo "#!/bin/sh" > amdstream.sh
+#     echo "export AMDSTREAMSDKROOT=${_installdir}/" >> amdstream.sh
+#     echo "export AMDSTREAMSDKSAMPLEROOT=${_installdir}/" >> amdstream.sh
+    mkdir -p ${D}/etc/env.d
+    echo "AMDSTREAMSDKROOT=${_installdir}/" >> ${D}/etc/env.d/99amdstream
+    echo "AMDSTREAMSDKSAMPLEROOT=${_installdir}/" >> ${D}/etc/env.d/99amdstream
+    echo "LDPATH=${_installdir}/lib/${_arch}" >> ${D}/etc/env.d/99amdstream
+    echo "PATH=${_installdir}/bin/${_arch}" >> ${D}/etc/env.d/99amdstream
+
+    # FIXME: Libraries
+    mkdir -p ${D}/usr/lib
+    cd ${D}${_installdir}/lib/${_arch}
+    for f in *.so; do
+        ln -s ${_installdir}/lib/${_arch}/${f} ${D}/usr/lib/
+    done
 
     #Fix modes
-    find ${D}/opt/amdstream/ -type f -exec chmod 644 {} \;
-    chmod 755 ${D}/opt/amdstream/bin/$_arch/clc
-    chmod 755 ${D}/opt/amdstream/lib/$_arch/*.so
-    find ${D}/opt/amdstream/samples/ -type f -not -name "*.*" -path "*/$_arch/*" -exec chmod 755 {} \;
+    find ${D}${_installdir}/ -type f -exec chmod 644 {} \;
+    chmod 755 ${D}${_installdir}/bin/${_arch}/clc
+    chmod 755 ${D}${_installdir}/lib/${_arch}/*.so
+    find ${D}${_installdir}/samples/ -type f -not -name "*.*" -path "*/${_arch}/*" -exec chmod 755 {} \;
+
+
 }
