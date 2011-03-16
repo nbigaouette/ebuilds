@@ -79,6 +79,7 @@ src_configure() {
 	myeconfargs=(
 		--enable-shared
 		--docdir="${EPREFIX}"/usr/share/doc/${PF}
+        --with-pic
 		$(use_enable dap)
 		$(use_enable static-libs static)
 		$(use_enable fortran f77)
