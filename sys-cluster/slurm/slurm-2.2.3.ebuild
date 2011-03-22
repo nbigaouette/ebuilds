@@ -15,15 +15,3 @@ IUSE=""
 
 DEPEND=("sys-auth/munge")
 
-# src_compile() {
-#     #econf --with-posix-regex
-#     econf
-#     emake
-# }
-#
-# src_install() {
-#     emake DESTDIR="${D}" install || die
-#
-# #     dodoc FAQ NEWS README || die
-# #     dohtml EXTENDING.html ctags.html
-# }
