@@ -13,6 +13,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
+DEPEND=("sys-auth/munge")
+
 # src_compile() {
 #     #econf --with-posix-regex
 #     econf
