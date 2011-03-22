@@ -15,3 +15,15 @@ IUSE=""
 
 DEPEND=("sys-auth/munge")
 
+# src_compile() {
+#     econf
+#     emake || die
+# }
+
+src_install() {
+    emake DESTDIR="${D}" install || die
+
+    # Why etc files aren't installed?
+    insinto /etc/${PN}
+    doins etc/*
+}
