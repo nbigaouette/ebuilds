@@ -20,7 +20,8 @@ start() {
 		eerror "Failed to verify/create munge key"
 		eend 1 && exit 1
 	fi
-	start-stop-daemon -S /usr/sbin/munged \
+	start-stop-daemon -S --exec /usr/sbin/munged \
+        --chuid munge:munge \
 		--user munge \
 		--group munge \
 		--pidfile /var/run/munge/munged.pid \
