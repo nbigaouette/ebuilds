@@ -19,7 +19,7 @@ start() {
     fi
 
     start-stop-daemon -S --exec /usr/sbin/slurmd \
-        --pidfile /var/run/slurmd.pid
+        --pidfile /var/run/slurmd.pid -- c
     eend ${?}
 }
 
