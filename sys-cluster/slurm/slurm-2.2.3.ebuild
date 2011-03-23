@@ -19,10 +19,10 @@ IUSE=""
 
 RDEPEND=("sys-auth/munge")
 
-pkg_setup() {
-    enewgroup slurm
-    enewuser slurm -1 -1 /dev/null slurm
-}
+#pkg_setup() {
+#    enewgroup slurm
+#    enewuser slurm -1 -1 /dev/null slurm
+#}
 
 # src_compile() {
 #     econf
