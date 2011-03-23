@@ -1,0 +1,32 @@
+#!/sbin/runscript
+# Copyright 1999-2010 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/sys-cluster/slurm/files/slurmctl.initd,v 1.1 2010/11/14 23:04:40 jsbronder Exp $
+
+depend() {
+    need munged
+    need ypbind
+    use logger
+}
+
+start() {
+    ebegin "Starting slurmctl"
+
+    if [ ! -f /etc/slurm.conf ]; then
+        eerror "File /etc/slurm.conf does not exists!"
+        eerror "Please run /usr/share/doc/*/html/configurator.html through a (javascript enabled) browser to create a file."
+        eend 1 && exit 1
+    fi
+
+    start-stop-daemon -S --exec /usr/sbin/slurmctld \
+        --pidfile /var/run/slurmctld.pid
+    eend ${?}
+}
+
+stop() {
+    ebegin "Stopping slurmctl"
+    start-stop-daemon -K /usr/sbin/slurmctld \
+        --pidfile /var/run/slurmctld.pid
+    eend ${?}
+}
+
