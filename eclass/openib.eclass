@@ -81,5 +81,5 @@ openib_src_unpack() {
 		*)
 			;;
 	esac
-	unpack ./${MY_PN}-${MY_PV}.${EXT}
+	unpack ./${MY_PN}-${MY_PV}*.${EXT}
 }
