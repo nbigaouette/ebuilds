@@ -23,8 +23,12 @@ SLOT="0"
 # @DESCRIPTION:
 # Defines OFED package suffix eg -1.ofed1.4
 
+# @ECLASS-VARIABLE: OFED_PATCH
+# @DESCRIPTION:
+# Defines OFED patch version eg .1 or nothing
 
-SRC_URI="http://www.openfabrics.org/downloads/OFED/ofed-${OFED_VER}/OFED-${OFED_VER}.tgz"
+
+SRC_URI="http://www.openfabrics.org/downloads/OFED/ofed-${OFED_VER}/OFED-${OFED_VER}${OFED_PATCH}.tgz"
 
 case ${PN} in
 	openib-osm)
@@ -69,7 +73,7 @@ S="${WORKDIR}/${MY_PN}-${MY_PV}"
 # This function will unpack OFED packages
 openib_src_unpack() {
 	unpack ${A}
-	rpm_unpack "./OFED-${OFED_VER}/SRPMS/${MY_PN}-${MY_PV}-${OFED_SUFFIX}.src.rpm"
+	rpm_unpack "./OFED-${OFED_VER}${OFED_PATCH}/SRPMS/${MY_PN}-${MY_PV}-${OFED_SUFFIX}.src.rpm"
 	case ${MY_PN} in
 		rds-tools)
 			MY_PV="${PV}-${OFED_SUFFIX}"
@@ -77,5 +81,5 @@ openib_src_unpack() {
 		*)
 			;;
 	esac
-	unpack ./${MY_PN}-${MY_PV}.${EXT}
+	unpack ./${MY_PN}-${MY_PV}*.${EXT}
 }
