@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit mpi fortran flag-o-matic
+inherit mpi flag-o-matic
 
 SLOT="0"
 EAPI=2
