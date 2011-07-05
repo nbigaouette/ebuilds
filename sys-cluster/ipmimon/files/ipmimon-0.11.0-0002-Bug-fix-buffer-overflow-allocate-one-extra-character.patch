@@ -1,0 +1,30 @@
+From b952d77a6e691f86a83a0f78cc13467ca0ff1464 Mon Sep 17 00:00:00 2001
+From: Nicolas Bigaouette <nbigaouette@gmail.com>
+Date: Tue, 5 Jul 2011 11:19:50 -0400
+Subject: [PATCH 2/5] Bug fix (buffer overflow): allocate one extra character in character strings
+ to host the end character (\0).
+
+---
+ cluster.cc |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/cluster.cc b/cluster.cc
+index 52e4555..63d371f 100644
+--- a/cluster.cc
++++ b/cluster.cc
+@@ -241,9 +241,9 @@ void cluster::parsecluster(char *clusterfilename){
+         fprintf(stderr,"Unable to locate chassis %s for node %s\nExiting now.\n",chassisname,nodename);
+         exit(1);
+       }
+-      mynodes[numnodes-1].name=(char *)malloc(strlen(nodename));
+-      mynodes[numnodes-1].username=(char *)malloc(strlen(username));
+-      mynodes[numnodes-1].password=(char *)malloc(strlen(password));
++      mynodes[numnodes-1].name=(char *)malloc(strlen(nodename)+1);
++      mynodes[numnodes-1].username=(char *)malloc(strlen(username)+1);
++      mynodes[numnodes-1].password=(char *)malloc(strlen(password)+1);
+       strcpy(mynodes[numnodes-1].name,nodename);
+       strcpy(mynodes[numnodes-1].username,username);
+       strcpy(mynodes[numnodes-1].password,password);
+-- 
+1.7.3
+

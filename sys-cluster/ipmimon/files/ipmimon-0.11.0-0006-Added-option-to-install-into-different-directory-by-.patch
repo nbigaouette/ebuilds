@@ -1,0 +1,34 @@
+From 8901f283853346f507b0132e3b2b017dac1528be Mon Sep 17 00:00:00 2001
+From: Nicolas Bigaouette <nbigaouette@gmail.com>
+Date: Tue, 5 Jul 2011 11:56:03 -0400
+Subject: [PATCH 6/6] Added option to install into different directory by defining DESTDIR outside of makefile.
+
+---
+ Makefile |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index bb8fdce..1f701b3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,6 +2,8 @@
+ # Makefile for IPMI Monitor Utility
+ # Richard Warner
+ 
++DESTDIR ?= /usr/local/sbin
++
+ CFLAGS := -Wall -g
+ CXXFLAGS := -Wall -g
+ all: ipmimon
+@@ -11,7 +13,7 @@ clean:
+ 
+ 
+ install: ipmimon
+-	install -oroot -groot ipmimon /usr/local/sbin
++	install -oroot -groot ipmimon ${DESTDIR}
+ 
+ ipmimon: main.o 
+ 	g++ -g -o ipmimon main.o -lpthread -lOpenIPMI -lOpenIPMIposix
+-- 
+1.7.3
+

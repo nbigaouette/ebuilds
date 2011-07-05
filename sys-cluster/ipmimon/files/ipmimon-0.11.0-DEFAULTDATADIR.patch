@@ -1,0 +1,12 @@
+--- defines.hh.orig	2011-06-25 15:09:06.850115764 -0400
++++ defines.hh	2011-06-25 15:09:20.502099914 -0400
+@@ -15,7 +15,8 @@
+ #define MAXTEMPS 16
+ #define MAXVOLTS 8
+ #define MAXDATADIR 256
+-#define DEFAULTDATADIR "/srv/www/htdocs/ganglia/data"
++#define DEFAULTDATADIR "/var/www/localhost/htdocs/ganglia/data"
++//#define DEFAULTDATADIR "/srv/www/htdocs/ganglia/data"
+ //#define DEFAULTDATADIR "/var/www/html/ganglia/data"
+ 
+ #define CHASSISDAT "chassis.dat"

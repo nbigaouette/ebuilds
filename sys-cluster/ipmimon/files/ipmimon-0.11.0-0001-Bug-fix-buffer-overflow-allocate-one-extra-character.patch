@@ -1,0 +1,38 @@
+From 921c32d82a7640b4836f77fa353726bdf8fe52d4 Mon Sep 17 00:00:00 2001
+From: Nicolas Bigaouette <nbigaouette@gmail.com>
+Date: Tue, 5 Jul 2011 11:19:44 -0400
+Subject: [PATCH 1/5] Bug fix (buffer overflow): allocate one extra character in character strings
+ to host the end character (\0).
+
+---
+ cluster.cc |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/cluster.cc b/cluster.cc
+index 4f8a697..52e4555 100644
+--- a/cluster.cc
++++ b/cluster.cc
+@@ -211,13 +211,13 @@ void cluster::parsecluster(char *clusterfilename){
+   int rv;
+ 
+   numnodes=0;
+-  nodename=(char *)malloc(MAXNODENAME);
+-  chassisname=(char *)malloc(MAXCHASSISNAME);
+-  username=(char *)malloc(MAXNODENAME);
+-  password=(char *)malloc(MAXNODENAME);
+-  emailsetting=(char *)malloc(MAXEMAILADDRESS);
+-  ipmitarget[0]=(char *)malloc(MAXNODENAME);
+-  ipmiport[0]=(char *)malloc(5);
++  nodename=(char *)malloc(MAXNODENAME+1);
++  chassisname=(char *)malloc(MAXCHASSISNAME+1);
++  username=(char *)malloc(MAXNODENAME+1);
++  password=(char *)malloc(MAXNODENAME+1);
++  emailsetting=(char *)malloc(MAXEMAILADDRESS+1);
++  ipmitarget[0]=(char *)malloc(MAXNODENAME+1);
++  ipmiport[0]=(char *)malloc(5+1);
+ 
+   strcpy(ipmiport[0],IPMIPORT);
+ 
+-- 
+1.7.3
+

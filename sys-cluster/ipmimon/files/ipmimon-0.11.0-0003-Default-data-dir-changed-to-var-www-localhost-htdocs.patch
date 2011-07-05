@@ -1,0 +1,25 @@
+From 17df3cbc38e86177a813d16d5a10b599f941907a Mon Sep 17 00:00:00 2001
+From: Nicolas Bigaouette <nbigaouette@gmail.com>
+Date: Tue, 5 Jul 2011 11:21:11 -0400
+Subject: [PATCH 3/5] Default data dir changed to "/var/www/localhost/htdocs/ganglia/data".
+
+---
+ defines.hh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/defines.hh b/defines.hh
+index e578807..dd73ad7 100644
+--- a/defines.hh
++++ b/defines.hh
+@@ -15,7 +15,7 @@
+ #define MAXTEMPS 16
+ #define MAXVOLTS 8
+ #define MAXDATADIR 256
+-#define DEFAULTDATADIR "/srv/www/htdocs/ganglia/data"
++#define DEFAULTDATADIR "/var/www/localhost/htdocs/ganglia/data"
+ //#define DEFAULTDATADIR "/var/www/html/ganglia/data"
+ 
+ #define CHASSISDAT "chassis.dat"
+-- 
+1.7.3
+

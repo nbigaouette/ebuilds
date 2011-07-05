@@ -1,0 +1,11 @@
+--- Makefile.orig	2011-06-24 17:30:21.420021884 -0400
++++ Makefile	2011-06-24 17:30:31.881049065 -0400
+@@ -11,7 +11,7 @@
+ 
+ 
+ install: ipmimon
+-	install -oroot -groot ipmimon /usr/local/sbin
++	install -oroot -groot ipmimon ${DESTDIR}
+ 
+ ipmimon: main.o 
+ 	g++ -g -o ipmimon main.o -lpthread -lOpenIPMI -lOpenIPMIposix

@@ -1,0 +1,25 @@
+From 61ee53018804421e0cac773522eefea5c80feedd Mon Sep 17 00:00:00 2001
+From: Nicolas Bigaouette <nbigaouette@gmail.com>
+Date: Tue, 5 Jul 2011 11:38:15 -0400
+Subject: [PATCH 5/5] Added comment about uninitialised value in ipmi_ip_setup_con().
+
+---
+ cluster.cc |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/cluster.cc b/cluster.cc
+index 63d371f..c550617 100644
+--- a/cluster.cc
++++ b/cluster.cc
+@@ -251,6 +251,8 @@ void cluster::parsecluster(char *clusterfilename){
+ //create ipmi connections and open domains here
+       sprintf(ipmitarget[0],"%s-ipmi",nodename);
+       
++      // ipmi_ip_setup_con() reports a "Conditional jump or move depends on uninitialised value"
++      // in ipmi_lanp_setup_con (ipmi_lan.c:5583) when run under valgrind,
+       rv = ipmi_ip_setup_con(ipmitarget,ipmiport,1,IPMI_AUTHTYPE_MD5,IPMI_PRIVILEGE_ADMIN,
+                              username,(strlen(username)),password,(strlen(password)),
+                              os_hnd,NULL,&mynodes[numnodes-1].ipmicon);
+-- 
+1.7.3
+

@@ -1,0 +1,19 @@
+#!/sbin/runscript
+
+IPMIMON="/usr/sbin/ipmimon"
+
+depend() {
+	need net
+}
+
+start() {
+	ebegin "Starting ipmimon: "
+	start-stop-daemon --start --quiet --exec $IPMIMON
+	eend $? "Failed to start ipmimon"
+}
+
+stop() {
+	ebegin "Shutting down ipmimon: "
+	start-stop-daemon --stop --quiet --exec $IPMIMON
+	eend $? "Failed to stop ipmimon"
+}
