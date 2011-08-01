@@ -1,0 +1,1 @@
+/var/lib/layman/science/eclass/mpi.eclass
