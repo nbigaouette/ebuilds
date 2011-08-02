@@ -23,7 +23,7 @@ elif [[ "${ARCH}" == "x86" ]]; then
 fi
 
 SRC_URI="http://software.intel.com/file/35820/${PN/-/_}_${PV}_lnx_${_bits}.rpm"
-LICENSE="intel"
+LICENSE="intel-opencl-sdk"
 SLOT="1.1"
 KEYWORDS="~amd64"
 
