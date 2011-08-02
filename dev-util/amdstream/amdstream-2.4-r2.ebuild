@@ -60,8 +60,11 @@ src_install() {
     rm -rf ${D}${_installdir}/samples/cal/bin/${_other_arch}
 
     #Register ICD
-    tar -zxvf icd-registration.tgz > /dev/null
-    cp -r etc ${D}/
+    #tar -zxvf icd-registration.tgz > /dev/null
+    #cp -r etc ${D}/
+    mkdir -p ${D}/etc/OpenCL/vendors/
+    echo "${_installdir}/lib/x86_64/libamdocl64.so" > ${D}/etc/OpenCL/vendors/amdocl64.icd
+    # FIXME: do the same for 32 bit
 
     #Install includes
     mkdir -p ${D}/usr/include/{CAL,OVDecode}
