@@ -16,7 +16,10 @@ fi
 
 DESCRIPTION="A free research management tool for desktop & web"
 HOMEPAGE="http://www.mendeley.com/"
-SRC_URI="${HOMEPAGE}/downloads/linux/${P}-${LNXARCH}.tar.bz2"
+
+# Version 1.0.1 downloaded from mendeley.com is NOT version 1.0.1 but version 1.0!
+# SRC_URI="${HOMEPAGE}/downloads/linux/${P}-${LNXARCH}.tar.bz2"
+SRC_URI="https://s3.amazonaws.com/mendeley-desktop-download/linux/${P}-${LNXARCH}.tar.bz2?u=122622&x=${P}-${LNXARCH}.tar.bz2 -> ${P}-${LNXARCH}.tar.bz2"
 
 LICENSE="Mendelay-EULA"
 SLOT="0"
@@ -27,8 +30,8 @@ RDEPEND="
     media-libs/libpng:1.2
     dev-libs/openssl:0.9.8"
 
-# S="${WORKDIR}/${P}-${LNXARCH}"
-S="${WORKDIR}/${PN}-${PV:0:3}-${LNXARCH}"
+S="${WORKDIR}/${P}-${LNXARCH}"
+# S="${WORKDIR}/${PN}-${PV:0:3}-${LNXARCH}"
 
 MENDELEY_INSTALL_DIR="/opt/${PN}"
 
