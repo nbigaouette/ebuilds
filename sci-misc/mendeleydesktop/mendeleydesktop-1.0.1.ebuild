@@ -38,26 +38,22 @@ src_install() {
     # Install commonly used icon sizes
     for res in 16x16 22x22 32x32 48x48 64x64 128x128 ; do
         insinto "/usr/share/icons/hicolor/${res}/apps"
-        doins "share/icons/hicolor/${res}/apps/${PN}.png" || \
-        die "Installing icons failed."
+        doins "share/icons/hicolor/${res}/apps/${PN}.png"
     done
     insinto "/usr/share/pixmaps"
-    doins "share/icons/hicolor/48x48/apps/${PN}.png" || \
-    die "Installing pixmap failed."
+    doins "share/icons/hicolor/48x48/apps/${PN}.png"
 
     # dodoc
-    dodoc "share/doc/${PN}/"* || die "Installing docs failed."
+    dodoc "share/doc/${PN}/"*
 
     # create directories for installation
-    dodir ${MENDELEY_INSTALL_DIR} || die "dodir failed"
-    dodir "${MENDELEY_INSTALL_DIR}/lib" || die "dodir failed"
-    dodir "${MENDELEY_INSTALL_DIR}/share" || die "dodir failed"
+    dodir ${MENDELEY_INSTALL_DIR}
+    dodir "${MENDELEY_INSTALL_DIR}/lib"
+    dodir "${MENDELEY_INSTALL_DIR}/share"
 
     # install binaries
-    mv "bin" "${D}${MENDELEY_INSTALL_DIR}" || die "Installing bin failed."
-    mv "lib" "${D}${MENDELEY_INSTALL_DIR}" || die "Installing libs failed."
-    mv "share/${PN}" "${D}${MENDELEY_INSTALL_DIR}/share" || \
-    die "Installing shared files failed."
-    dosym "${MENDELEY_INSTALL_DIR}/bin/${PN}" "/opt/bin/${PN}" || \
-    die "Installing launcher symlinks failed."
+    mv "bin" "${D}${MENDELEY_INSTALL_DIR}"
+    mv "lib" "${D}${MENDELEY_INSTALL_DIR}"
+    mv "share/${PN}" "${D}${MENDELEY_INSTALL_DIR}/share"
+    dosym "${MENDELEY_INSTALL_DIR}/bin/${PN}" "/opt/bin/${PN}"
 }
