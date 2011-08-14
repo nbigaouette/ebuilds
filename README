@@ -5,7 +5,7 @@ but they could be written from scratch.
 
 To add the repo to layman's database, to the following:
 
-1. Add "https://raw.github.com/nbigaouette/ebuilds/master/overlay.xml"
+1. Add https://raw.github.com/nbigaouette/ebuilds/master/overlay.xml
 to the "overlays" section of /etc/layman/layman.cfg.
 
 2. Fetch the remote list of database using "layman -f"
