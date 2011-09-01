@@ -21,7 +21,7 @@ SRC_URI="doc? ( mirror://gentoo/${PN}-sampledata.tar.bz2 )
 
 IUSE="cairo doc excel examples fltk gtk latex qt4 traits tk wxwidgets"
 SLOT="0"
-KEYWORDS="amd64 ppc ~ppc64 x86 ~x86-freebsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
+KEYWORDS=""
 LICENSE="PYTHON BSD"
 
 CDEPEND="dev-python/numpy
