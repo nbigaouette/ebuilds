@@ -46,19 +46,17 @@ src_install() {
     #insinto /opt/${My_PN}
     #doins ${S}
 
-    dosym ${_destination}/${My_PN} /usr/bin/
-
     html2text ${D}${_destination}/Legal/EndUserLicenseAgreement.htm > ${D}/usr/portage/licenses/${My_PN}.txt || die "Can't copy license"
 
     echo "[Desktop Entry]
 Name=${My_PN}
-Exec=${My_PN}
+Exec=${_destination}/${My_PN}
 Type=Application
 GenericName=OpenCL/OpenGL debugger
 Terminal=false
-Icon=${My_PN}
+Icon=${_destination}/tutorial/images/applicationicon_64.jpg
 Caption=OpenCL/OpenGL debugger
-Categories=Application;" > ${D}/usr/share/applications/${PN}.desktop || die "Can't create .desktop file"
+Categories=Application;Development;" > ${D}/usr/share/applications/${PN}.desktop || die "Can't create .desktop file"
 
     insinto /usr/share/icons/hicolor/64x64/apps/
     newins ${D}${_destination}/tutorial/images/applicationicon_64.jpg ${My_PN}.jpg
