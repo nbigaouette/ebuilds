@@ -18,6 +18,11 @@ RDEPEND=""
 MAKEOPTS="${MAKEOPTS} -j1"
 
 pkg_setup() {
+    ewarn
+    ewarn "This package is known to have issues with the sandbox"
+    ewarn "If you experience problems, please re-emerge with:"
+    ewarn "FEATURES=\"-sandbox -usersandbox\""
+    ewarn
 	linux-mod_pkg_setup
 	MODULE_NAMES="blcr(blcr::${S}/cr_module/kbuild)
 		blcr_imports(blcr::${S}/blcr_imports/kbuild)"
