@@ -12,7 +12,7 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
-DEPEND=""
+DEPEND="!>=sys-kernel/gentoo-sources-2.6.39"
 RDEPEND=""
 
 MAKEOPTS="${MAKEOPTS} -j1"
