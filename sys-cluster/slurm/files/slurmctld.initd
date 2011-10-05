@@ -1,32 +1,47 @@
 #!/sbin/runscript
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sys-cluster/slurm/files/slurmctl.initd,v 1.1 2010/11/14 23:04:40 jsbronder Exp $
+# $Header: /var/cvsroot/gentoo-x86/sys-cluster/slurm/files/slurmctld.initd,v 1.2 2011/07/04 10:15:30 alexxy Exp $
+
+opts="reload"
+
+[[ -f /etc/conf.d/slurm ]] && . /etc/conf.d/slurm
 
 depend() {
-    need munged
-    need ypbind
-    use logger
+	local _need="net"
+	[[ ${SLURM_USE_MUNGE} -ne 0 ]] && _need="${_need} munged"
+    [[ ${SLURM_USE_YPBIND} -ne 0 ]] && _need="${_need} ypbind"
+	after logger
+	need ${_need}
+}
+
+checkconfig() {
+	if [ ! -e "/etc/slurm/slurm.conf" ]; then
+		eerror "Missing config /etc/slurm/slurm.conf"
+		eerror "Customize sample one or generate new by configurator.html"
+		eerror "in slurm doc directory"
+		return 1
+	fi
 }
 
 start() {
-    ebegin "Starting slurmctl"
-
-    if [ ! -f /etc/slurm.conf ]; then
-        eerror "File /etc/slurm.conf does not exists!"
-        eerror "Please run /usr/share/doc/*/html/configurator.html through a (javascript enabled) browser to create a file."
-        eend 1 && exit 1
-    fi
-
-    start-stop-daemon -S --exec /usr/sbin/slurmctld \
-        --pidfile /var/run/slurmctld.pid
-    eend ${?}
+	ebegin "Starting slurm control daemon"
+	start-stop-daemon --start --quiet --background \
+		--pidfile /var/run/slurm/slurmctld.pid \
+		--user slurm \
+		--group slurm \
+		--exec /usr/sbin/slurmctld -- ${SLURMCTLD_OPTS}
+	eend $?
 }
 
 stop() {
-    ebegin "Stopping slurmctl"
-    start-stop-daemon -K /usr/sbin/slurmctld \
-        --pidfile /var/run/slurmctld.pid
-    eend ${?}
+	ebegin "Stopping slurm control daemon"
+	start-stop-daemon --stop --pidfile /var/run/slurm/slurmctld.pid
+	eend $?
 }
 
+reload() {
+	ebegin "Reloading slurm daemon configuration"
+	start-stop-daemon --signal HUP --pidfile /var/run/slurm/slurmctld.pid
+	eend $?
+}
