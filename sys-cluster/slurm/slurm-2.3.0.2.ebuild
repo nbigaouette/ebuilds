@@ -63,6 +63,8 @@ src_configure() {
     local myconf=(
             --sysconfdir="${EPREFIX}/etc/${PN}"
             --with-hwloc="${EPREFIX}/usr"
+            --docdir="${EPREFIX}/usr/share/doc/${P}"
+            --htmldir="${EPREFIX}/usr/share/doc/${P}"
             )
     use pam && myconf+=( --with-pam_dir=$(getpam_mod_dir) )
     use mysql || myconf+=( --without-mysql_config )
@@ -72,6 +74,11 @@ src_configure() {
         $(use_with ssl) \
         $(use_with munge) \
         $(use_enable static-libs static)
+
+    # --htmldir does not seems to propagate... Documentations are installed
+    # in /usr/share/doc/slurm-2.3.0/html
+    # instead of /usr/share/doc/slurm-2.3.0.2/html
+    sed -e "s|htmldir = .*/html|htmldir = \${prefix}/share/doc/slurm-${PV}/html|g" -i doc/html/Makefile || die
 }
 
 src_compile() {
