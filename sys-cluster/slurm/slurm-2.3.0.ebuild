@@ -5,12 +5,14 @@
 # TODO:
 #   Set use flags
 
+RESTRICT="primaryuri"
+
 EAPI="3"
 inherit eutils
 
 DESCRIPTION="The Simple Linux Utility for Resource Management (SLURM) is an open source, fault-tolerant, and highly scalable cluster management and job scheduling system for large and small Linux clusters."
 HOMEPAGE="https://computing.llnl.gov/linux/slurm"
-SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
+SRC_URI="http://www.schedmd.com/download/latest/${P}-2.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -19,9 +21,12 @@ IUSE=""
 
 RDEPEND=("sys-auth/munge")
 
-src_install() {
+src_compile()
+{
     emake DESTDIR="${D}" install || die
+}
 
+src_install() {
     # Why etc files aren't installed?
     insinto /etc/${PN}
     doins etc/*
