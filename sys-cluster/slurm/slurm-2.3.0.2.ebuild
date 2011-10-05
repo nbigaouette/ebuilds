@@ -46,8 +46,8 @@ src_prepare() {
     sed -e 's:/dev/cgroup:/sys/fs/cgroup:g' \
         -i "${S}/doc/man/man5/cgroup.conf.5" \
         -i "${S}/etc/cgroup.conf.example" \
-        -i "${S}/etc/cgroup.release_agent" \
-        -i "${S}/src/plugins/proctrack/cgroup/xcgroup.h" \
+        -i "${S}/etc/cgroup.release_common.example" \
+        -i "${S}/src/common/xcgroup.h" \
         || die
     # and pids should go to /var/run/slurm
     sed -e 's:/var/run/slurmctld.pid:/var/run/slurm/slurmctld.pid:g' \
