@@ -18,13 +18,14 @@ SRC_URI="http://www.schedmd.com/download/latest/${MY_P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="maui +munge mysql pam postgres ssl static-libs"
+IUSE="maui +munge mysql pam postgres ssl static-libs ypbind"
 
 DEPEND="
     !sys-cluster/torque
     !net-analyzer/slurm
     mysql? ( dev-db/mysql )
     munge? ( sys-auth/munge )
+    ypbind? ( net-nds/ypbind )
     pam? ( virtual/pam )
     postgres? ( dev-db/postgresql-base )
     ssl? ( dev-libs/openssl )
@@ -109,6 +110,9 @@ src_install() {
 pkg_preinst() {
     if use munge; then
         sed -i 's,\(PBS_USE_MUNGE=\).*,\11,' "${D}"etc/conf.d/slurm || die
+    fi
+    if use ypbind; then
+        sed -i 's,\(PBS_USE_YPBIND=\).*,\11,' "${D}"etc/conf.d/slurm || die
     fi
 }
 
