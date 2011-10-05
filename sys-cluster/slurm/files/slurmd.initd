@@ -25,6 +25,12 @@ checkconfig() {
 
 start() {
 	ebegin "Starting slurm daemon"
+
+    # Slurm does not propagate limits, which can brakes InfiniBand
+    # See http://www.open-mpi.org/faq/?category=openfabrics
+    # and https://computing.llnl.gov/linux/slurm/faq.html#rlimit
+    ulimit -l unlimited
+
 	start-stop-daemon --start --quiet --background \
 		--pidfile /var/run/slurm/slurmd.pid \
 		--user root \
