@@ -26,6 +26,9 @@ checkconfig() {
 
 start() {
 	ebegin "Starting slurm control daemon"
+
+    checkconfig
+
 	start-stop-daemon --start --quiet --background \
 		--pidfile /var/run/slurm/slurmctld.pid \
 		--user slurm \
