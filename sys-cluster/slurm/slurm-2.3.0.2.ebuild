@@ -7,12 +7,16 @@
 
 RESTRICT="primaryuri"
 
-EAPI="3"
-inherit eutils
+EAPI="4"
+inherit eutils versionator
+
+MY_PV=$(replace_version_separator 3 '-')
+MY_P="${PN}-${MY_PV}"
+
 
 DESCRIPTION="The Simple Linux Utility for Resource Management (SLURM) is an open source, fault-tolerant, and highly scalable cluster management and job scheduling system for large and small Linux clusters."
 HOMEPAGE="https://computing.llnl.gov/linux/slurm"
-SRC_URI="http://www.schedmd.com/download/latest/${P}-2.tar.bz2"
+SRC_URI="http://www.schedmd.com/download/latest/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -21,19 +25,18 @@ IUSE=""
 
 RDEPEND=("sys-auth/munge")
 
-src_compile()
-{
-    emake DESTDIR="${D}" install || die
-}
+S="${WORKDIR}/${MY_P}"
 
 src_install() {
+    emake DESTDIR="${D}" install
+
     # Why etc files aren't installed?
     insinto /etc/${PN}
     doins etc/*
 
     [ -d "${D}"/etc/init.d ] && rm -r "${D}"/etc/init.d
-    newinitd "${FILESDIR}/${PN}d.initd"    ${PN}d    || die
-    newinitd "${FILESDIR}/${PN}ctld.initd" ${PN}ctld || die
+    newinitd "${FILESDIR}/${PN}d.initd"    ${PN}d
+    newinitd "${FILESDIR}/${PN}ctld.initd" ${PN}ctld
 }
 
 pkg_postinst() {
