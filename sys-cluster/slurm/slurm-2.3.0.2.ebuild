@@ -97,7 +97,7 @@ src_install() {
     doins etc/slurm.conf.example
     doins etc/slurmdbd.conf.example
     exeinto /etc/slurm
-    doexe etc/cgroup.release_agent
+    doexe etc/cgroup.release_common.example
     doexe etc/slurm.epilog.clean
     # install init.d files
     newinitd "${FILESDIR}/slurmd.initd" slurmd
