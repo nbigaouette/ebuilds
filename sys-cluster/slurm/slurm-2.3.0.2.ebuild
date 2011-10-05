@@ -116,10 +116,10 @@ src_install() {
 
 pkg_preinst() {
     if use munge; then
-        sed -i 's,\(PBS_USE_MUNGE=\).*,\11,' "${D}"etc/conf.d/slurm || die
+        sed -i 's,\(SLURM_USE_MUNGE=\).*,\11,' "${D}"etc/conf.d/slurm || die
     fi
     if use ypbind; then
-        sed -i 's,\(PBS_USE_YPBIND=\).*,\11,' "${D}"etc/conf.d/slurm || die
+        sed -i 's,\(SLURM_USE_YPBIND=\).*,\11,' "${D}"etc/conf.d/slurm || die
     fi
 }
 
