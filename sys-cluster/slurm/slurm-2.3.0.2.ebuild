@@ -123,16 +123,32 @@ pkg_preinst() {
     fi
 }
 
+create_folders_and_fix_permissions() {
+    einfo "Fixing permissions in ${@}"
+    mkdir -p ${@}
+    chown -R ${PN}:${PN} ${@}
+}
+
 pkg_postinst() {
-    einfo "Fixing permissions in /var/spool/${PN}"
-    chown -R ${PN}:${PN} /var/spool/${PN}
-    einfo "Fixing permissions in /var/run/${PN}"
-    chown -R ${PN}:${PN} /var/run/${PN}
-    einfo "Fixing permissions in /var/log/${PN}"
-    chown -R ${PN}:${PN} /var/log/${PN}
+    paths=(/var/${PN}/checkpoint
+            /var/${PN}
+            /var/spool/${PN}
+            /var/spool/${PN}/slurmd
+            /var/run/${PN}
+            /var/log/${PN}
+            /tmp/${PN}/${PN}d
+            /tmp/${PN})
+    for folder_path in ${paths[@]}; do
+        create_folders_and_fix_permissions $folder_path
+    done
     echo
 
     elog "Please visit the file '/usr/share/doc/${P}/html/configurator.html"
     elog "through a (javascript enabled) browser to create a configureation file."
     elog "Copy that file to /etc/slurm/slurm.conf on all nodes (including the headnode) of your cluster."
+    echo
+    ewarn "Paths were created for slurm. Please use these paths in /etc/slurm/slurm.conf:"
+    for folder_path in ${paths[@]}; do
+    ewarn "    ${folder_path}"
+    done
 }

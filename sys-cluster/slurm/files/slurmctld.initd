@@ -22,10 +22,6 @@ checkconfig() {
 		eerror "in slurm doc directory"
 		return 1
 	fi
-
-    # Verify permission on log file
-    touch /var/log/slurmctld.log
-    chown slurm:slurm /var/log/slurmctld.log
 }
 
 start() {

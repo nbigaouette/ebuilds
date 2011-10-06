@@ -20,10 +20,6 @@ checkconfig() {
 		eerror "Missing config /etc/slurm/slurmdbd.conf"
 		return 1
 	fi
-
-    # Verify permission on log file
-    touch /var/log/slurmdbd.log
-    chown slurm:slurm /var/log/slurmdbd.log
 }
 
 start() {
