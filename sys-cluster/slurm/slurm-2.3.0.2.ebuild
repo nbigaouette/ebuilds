@@ -1,10 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 RESTRICT="primaryuri"
 
-EAPI="4"
+EAPI=4
 inherit eutils versionator pam
 
 MY_PV=$(replace_version_separator 3 '-')
