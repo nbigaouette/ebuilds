@@ -36,8 +36,8 @@ start() {
 
 	start-stop-daemon --start --quiet --background \
 		--pidfile /var/run/slurm/slurmd.pid \
-		--user slurm \
-		--group slurm \
+		--user root \
+		--group root \
 		--exec /usr/sbin/slurmd -- ${SLURMD_OPTS}
 	eend $?
 }
