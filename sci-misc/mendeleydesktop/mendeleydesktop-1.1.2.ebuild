@@ -17,18 +17,24 @@ fi
 DESCRIPTION="A free research management tool for desktop & web"
 HOMEPAGE="http://www.mendeley.com/"
 
-# Version 1.0.1 downloaded from mendeley.com is NOT version 1.0.1 but version 1.0!
-# SRC_URI="${HOMEPAGE}/downloads/linux/${P}-${LNXARCH}.tar.bz2"
-SRC_URI="https://s3.amazonaws.com/mendeley-desktop-download/linux/${P}-${LNXARCH}.tar.bz2?u=122622&x=${P}-${LNXARCH}.tar.bz2 -> ${P}-${LNXARCH}.tar.bz2"
+SRC_URI="http://www.mendeley.com/client/get/100-2/ -> ${P}-${LNXARCH}.tar.bz2"
 
 LICENSE="Mendelay-EULA"
 SLOT="0"
-KEYWORDS="amd64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 RESTRICT="mirror strip"
-RDEPEND="
-    media-libs/libpng:1.2
-    dev-libs/openssl:0.9.8"
+# RDEPEND="
+#     media-libs/libpng:1.2
+#     dev-libs/openssl:0.9.8"
+RDEPEND="x11-libs/qt-core:4
+         x11-libs/qt-gui:4
+         x11-libs/qt-svg:4
+         x11-libs/qt-webkit:4
+         x11-libs/qt-xmlpatterns:4
+         dev-lang/python:2.7"
+DEPEND="${RDEPEND}"
+
 
 S="${WORKDIR}/${P}-${LNXARCH}"
 # S="${WORKDIR}/${PN}-${PV:0:3}-${LNXARCH}"
@@ -55,8 +61,12 @@ src_install() {
     dodir "${MENDELEY_INSTALL_DIR}/share"
 
     # install binaries
-    mv "bin" "${D}${MENDELEY_INSTALL_DIR}"
-    mv "lib" "${D}${MENDELEY_INSTALL_DIR}"
-    mv "share/${PN}" "${D}${MENDELEY_INSTALL_DIR}/share"
-    dosym "${MENDELEY_INSTALL_DIR}/bin/${PN}" "/opt/bin/${PN}"
+    cp -r "bin" "${D}${MENDELEY_INSTALL_DIR}" || die "Can't copy bin directory"
+    cp -r "lib" "${D}${MENDELEY_INSTALL_DIR}" || die "Can't copy lib directory"
+    cp -r "share/${PN}" "${D}${MENDELEY_INSTALL_DIR}/share" || die "Can't copy share/${PN} directory"
+    dosym "${MENDELEY_INSTALL_DIR}/bin/${PN}" "/usr/bin/${PN}"
+    sed -i '1s@^#!/usr/bin/python$@&2@' ${D}${MENDELEY_INSTALL_DIR}/bin/${PN} || die "Can't sed for python2"
+
+    # Delete bundled Qt
+    rm -fr ${D}${MENDELEY_INSTALL_DIR}/lib/qt || die "Can't delete qt folder"
 }
