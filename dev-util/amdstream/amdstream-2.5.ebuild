@@ -24,7 +24,7 @@ _ARCHIVE_NAME="AMD-APP-SDK"
 _ARCHIVE_DONWLOAD="${_ARCHIVE_NAME}-v${PV}-lnx${_bits}.tgz"
 _ARCHIVE_UNPACKED="${_ARCHIVE_NAME}-v${PV}-RC2-lnx${_bits}.tgz"
 
-SRC_URI="http://download2-developer.amd.com/amd/APPSDK/${_ARCHIVE_DONWLOAD}"
+SRC_URI="http://developer.amd.com/Downloads/${_ARCHIVE_DONWLOAD}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -45,7 +45,7 @@ RESTRICT="mirror strip"
 S="${WORKDIR}/${_ARCHIVE_UNPACKED/.tgz/}"
 
 src_unpack() {
-    unpack ${_ARCHIVE_DONWLOAD}
+    default_src_unpack
     unpack ./${_ARCHIVE_UNPACKED}
 }
 
