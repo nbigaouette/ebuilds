@@ -20,11 +20,15 @@ elif [[ "${ARCH}" == "x86" ]]; then
     _bits="32"
 fi
 
-SRC_URI="http://download2-developer.amd.com/amd/APPSDK/AMD-APP-SDK-v${PV}-lnx${_bits}.tgz"
+_ARCHIVE_NAME="AMD-APP-SDK"
+_ARCHIVE_DONWLOAD="${_ARCHIVE_NAME}-v${PV}-lnx${_bits}.tgz"
+_ARCHIVE_UNPACKED="${_ARCHIVE_NAME}-v${PV}-RC2-lnx${_bits}.tgz"
+
+SRC_URI="http://download2-developer.amd.com/amd/APPSDK/${_ARCHIVE_DONWLOAD}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
-
+IUSE=""
 
 RDEPEND="app-admin/eselect-opengl
         sys-devel/llvm
@@ -38,14 +42,18 @@ DEPEND="${RDEPEND}
 
 RESTRICT="mirror strip"
 
-S="${WORKDIR}/AMD-APP-SDK-v${PV}-lnx${_bits}"
+S="${WORKDIR}/${_ARCHIVE_UNPACKED/.tgz/}"
+
+src_unpack() {
+    unpack ${_ARCHIVE_DONWLOAD}
+    unpack ./${_ARCHIVE_UNPACKED}
+}
 
 src_compile() {
     emake -j1 || die "Make failed!"
 }
 
 src_install() {
-
     #_installdir=/opt/amdstream
     _installdir=/usr/share/amdstream
 
@@ -55,7 +63,6 @@ src_install() {
     mkdir -p ${D}${_installdir}/{bin/${_arch},lib,samples}
     cp -r ./bin/${_arch}/clinfo ${D}${_installdir}/bin/${_arch}/clinfo
     cp -r ./lib/${_arch} ${D}${_installdir}/lib/
-    cp -r ./lib/gpu ${D}${_installdir}/lib/
     rm -rf ${D}${_installdir}/samples/opencl/bin/${_other_arch}
     rm -rf ${D}${_installdir}/samples/cal/bin/${_other_arch}
 
