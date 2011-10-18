@@ -22,6 +22,16 @@ checkconfig() {
 		eerror "in slurm doc directory"
 		return 1
 	fi
+
+    # Make sure folders exists
+    . /etc/slurm/slurm.conf
+    [[ ! -d "${SlurmdSpoolDir}" ]]              && mkdir -p ${SlurmdSpoolDir}
+    [[ ! -d "`dirname ${SlurmctldLogFile}`" ]]  && mkdir -p `dirname ${SlurmctldLogFile}`
+    [[ ! -d "`dirname ${SlurmctldPidFile}`" ]]  && mkdir -p `dirname ${SlurmctldPidFile}`
+    [[ ! -d "`dirname ${SlurmdLogFile}`" ]]     && mkdir -p `dirname ${SlurmdLogFile}`
+    [[ ! -d "`dirname ${SlurmdPidFile}`" ]]     && mkdir -p `dirname ${SlurmdPidFile}`
+    [[ ! -d "`dirname ${SlurmdSpoolDir}`" ]]    && mkdir -p `dirname ${SlurmdSpoolDir}`
+    [[ ! -d "`dirname ${StateSaveLocation}`" ]] && mkdir -p `dirname ${StateSaveLocation}`
 }
 
 start() {
