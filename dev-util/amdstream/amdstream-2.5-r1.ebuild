@@ -10,11 +10,11 @@ HOMEPAGE="http://developer.amd.com/sdks/amdappsdk/pages/default.aspx"
 _OpenCL_ver_major=1
 _OpenCL_ver_minor=1
 
-if [[ "${ARCH}" == "amd64" ]]; then
+if use amd64; then
     _arch="x86_64"
     _other_arch="x86"
     _bits="64"
-elif [[ "${ARCH}" == "x86" ]]; then
+elif use x86; then
     _arch="x86"
     _other_arch="x86_64"
     _bits="32"
