@@ -138,7 +138,6 @@ src_prepare() {
 	echo "examples.download : False" >> matplotlibrc.template
 	echo "examples.directory : ${EPREFIX}/usr/share/${PF}/examples/sample_data" >> matplotlibrc.template
 
-	epatch "${FILESDIR}"/${P}-sphinx.patch
 	epatch "${FILESDIR}"/${P}-linux3.patch
 }
 
