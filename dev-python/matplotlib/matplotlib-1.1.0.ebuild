@@ -67,7 +67,6 @@ RDEPEND="${CDEPEND}
 PYTHON_CFLAGS=("2.* + -fno-strict-aliasing")
 PYTHON_CXXFLAGS=("2.* + -fno-strict-aliasing")
 
-DOCS="INTERACTIVE"
 PYTHON_MODNAME="matplotlib mpl_toolkits pylab.py"
 
 use_setup() {
