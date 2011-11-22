@@ -15,6 +15,16 @@ depend() {
 	need ${_need}
 }
 
+create_folder_and_set_permission() {
+    folder=${1}
+
+    # Create folder
+    [[ ! -d "${folder}" ]]  && mkdir -p ${folder}
+
+    # Fix permissions (/tmp is wiped at boot)
+    chown slurm:slurm -R ${folder}
+}
+
 checkconfig() {
 	if [ ! -e "/etc/slurm/slurm.conf" ]; then
 		eerror "Missing config /etc/slurm/slurm.conf"
@@ -25,13 +35,10 @@ checkconfig() {
 
     # Make sure folders exists
     . /etc/slurm/slurm.conf
-    [[ ! -d "${SlurmdSpoolDir}" ]]              && mkdir -p ${SlurmdSpoolDir}
-    [[ ! -d "`dirname ${SlurmctldLogFile}`" ]]  && mkdir -p `dirname ${SlurmctldLogFile}`
-    [[ ! -d "`dirname ${SlurmctldPidFile}`" ]]  && mkdir -p `dirname ${SlurmctldPidFile}`
-    [[ ! -d "`dirname ${SlurmdLogFile}`" ]]     && mkdir -p `dirname ${SlurmdLogFile}`
-    [[ ! -d "`dirname ${SlurmdPidFile}`" ]]     && mkdir -p `dirname ${SlurmdPidFile}`
-    [[ ! -d "`dirname ${SlurmdSpoolDir}`" ]]    && mkdir -p `dirname ${SlurmdSpoolDir}`
-    [[ ! -d "`dirname ${StateSaveLocation}`" ]] && mkdir -p `dirname ${StateSaveLocation}`
+    folders=(${SlurmdSpoolDir} `dirname ${SlurmctldLogFile}` `dirname ${SlurmctldPidFile}` `dirname ${SlurmdLogFile}` `dirname ${SlurmdPidFile}` `dirname ${SlurmdSpoolDir}` `dirname ${StateSaveLocation}`)
+    for folder in ${folders[*]}; do
+        create_folder_and_set_permission ${folder}
+    done
 }
 
 start() {
