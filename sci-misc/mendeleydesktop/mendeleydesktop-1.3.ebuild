@@ -12,6 +12,8 @@ if use amd64; then
     LNXARCH="linux-x86_64"
 elif use x86; then
     LNXARCH="linux-i486"
+else
+    die "Architecture incorectly detected. Only 'x86' and 'amd64' are supported."
 fi
 
 DESCRIPTION="A free research management tool for desktop & web"
