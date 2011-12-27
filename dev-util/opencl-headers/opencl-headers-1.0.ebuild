@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 RDEPEND=""
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND} !dev-util/nvidia-cuda-toolkit"
 
 RESTRICT="mirror"
 
