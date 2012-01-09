@@ -25,6 +25,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="qt-bundled"
 RESTRICT="mirror strip"
+
 RDEPEND="
     !qt-bundled? (
         <x11-libs/qt-core-4.8
@@ -36,7 +37,8 @@ RDEPEND="
     qt-bundled? (
         media-libs/libpng:1.2
     )
-         dev-lang/python:2.7"
+    dev-lang/python:2.7
+    dev-libs/openssl:0.9.8"
 DEPEND="${RDEPEND}"
 
 
@@ -80,4 +82,7 @@ src_install() {
         # Delete bundled Qt
         rm -fr ${D}${MENDELEY_INSTALL_DIR}/lib/qt || die "Can't delete qt folder"
     fi
+
+    # Delete bundled OpenSSL 0.9.8
+    rm -fr ${D}${MENDELEY_INSTALL_DIR}/lib/ssl || die "Can't delete ssl folder"
 }
