@@ -25,9 +25,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="qt-bundled"
 RESTRICT="mirror strip"
-# RDEPEND="
-#     media-libs/libpng:1.2
-#     dev-libs/openssl:0.9.8"
 RDEPEND="
     !qt-bundled? (
         <x11-libs/qt-core-4.8
