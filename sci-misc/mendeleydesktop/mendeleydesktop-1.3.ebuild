@@ -8,8 +8,9 @@ EAPI=4
 
 inherit eutils
 
-ARCHIVE_X86="${P}-linux-i486.tar.bz2"
-ARCHIVE_AMD64="${P}-linux-x86_64.tar.bz2"
+ARCHIVE_BASE="${P}-linux-BASE.tar.bz2"
+ARCHIVE_X86="${ARCHIVE_BASE/BASE/i486}"
+ARCHIVE_AMD64="${ARCHIVE_BASE/BASE/x86_64}"
 
 DESCRIPTION="A free research management tool for desktop & web"
 HOMEPAGE="http://www.mendeley.com/"
@@ -36,10 +37,11 @@ RDEPEND="x11-libs/qt-core:4
 DEPEND="${RDEPEND}"
 
 
-S="
-    x86?   ( ${WORKDIR}/${ARCHIVE_X86}   )
-    amd64? ( ${WORKDIR}/${ARCHIVE_AMD64} )
-"
+if   [[ "${ARCH}" == "x86" ]]; then
+    S=${WORKDIR}/${ARCHIVE_X86/.tar.bz2/}
+elif [[ "${ARCH}" == "amd64" ]]; then
+    S=${WORKDIR}/${ARCHIVE_AMD64/.tar.bz2/}
+fi
 
 MENDELEY_INSTALL_DIR="/opt/${PN}"
 
