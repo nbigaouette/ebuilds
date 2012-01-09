@@ -41,7 +41,6 @@ RDEPEND="
     dev-libs/openssl:0.9.8"
 DEPEND="${RDEPEND}"
 
-
 if   [[ "${ARCH}" == "x86" ]]; then
     S=${WORKDIR}/${ARCHIVE_X86/.tar.bz2/}
 elif [[ "${ARCH}" == "amd64" ]]; then
