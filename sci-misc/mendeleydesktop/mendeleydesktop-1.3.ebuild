@@ -36,6 +36,9 @@ RDEPEND="
         <x11-libs/qt-webkit-4.8
         <x11-libs/qt-xmlpatterns-4.8
     )
+    qt-bundled? (
+        media-libs/libpng:1.2
+    )
          dev-lang/python:2.7"
 DEPEND="${RDEPEND}"
 
