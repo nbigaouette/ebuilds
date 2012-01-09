@@ -8,18 +8,16 @@ EAPI=4
 
 inherit eutils
 
-if use amd64; then
-    LNXARCH="linux-x86_64"
-elif use x86; then
-    LNXARCH="linux-i486"
-else
-    die "Architecture incorectly detected. Only 'x86' and 'amd64' are supported."
-fi
+ARCHIVE_X86="${P}-linux-i486.tar.bz2"
+ARCHIVE_AMD64="${P}-linux-x86_64.tar.bz2"
 
 DESCRIPTION="A free research management tool for desktop & web"
 HOMEPAGE="http://www.mendeley.com/"
 
-SRC_URI="http://download.mendeley.com/linux/${P}-${LNXARCH}.tar.bz2"
+SRC_URI="
+    x86?   ( http://download.mendeley.com/linux/${ARCHIVE_X86}   )
+    amd64? ( http://download.mendeley.com/linux/${ARCHIVE_AMD64} )
+"
 
 LICENSE="Mendelay-EULA"
 SLOT="0"
@@ -38,8 +36,10 @@ RDEPEND="x11-libs/qt-core:4
 DEPEND="${RDEPEND}"
 
 
-S="${WORKDIR}/${P}-${LNXARCH}"
-# S="${WORKDIR}/${PN}-${PV:0:3}-${LNXARCH}"
+S="
+    x86?   ( ${WORKDIR}/${ARCHIVE_X86}   )
+    amd64? ( ${WORKDIR}/${ARCHIVE_AMD64} )
+"
 
 MENDELEY_INSTALL_DIR="/opt/${PN}"
 
