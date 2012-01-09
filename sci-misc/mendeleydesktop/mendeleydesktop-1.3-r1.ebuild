@@ -8,38 +8,44 @@ EAPI=4
 
 inherit eutils
 
-if use amd64; then
-    LNXARCH="linux-x86_64"
-elif use x86; then
-    LNXARCH="linux-i486"
-else
-    die "Architecture incorectly detected. Only 'x86' and 'amd64' are supported."
-fi
+ARCHIVE_BASE="${P}-linux-BASE.tar.bz2"
+ARCHIVE_X86="${ARCHIVE_BASE/BASE/i486}"
+ARCHIVE_AMD64="${ARCHIVE_BASE/BASE/x86_64}"
 
 DESCRIPTION="A free research management tool for desktop & web"
 HOMEPAGE="http://www.mendeley.com/"
 
-SRC_URI="http://download.mendeley.com/linux/${P}-${LNXARCH}.tar.bz2"
+SRC_URI="
+    x86?   ( http://download.mendeley.com/linux/${ARCHIVE_X86}   )
+    amd64? ( http://download.mendeley.com/linux/${ARCHIVE_AMD64} )
+"
 
 LICENSE="Mendelay-EULA"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="qt-bundled"
 RESTRICT="mirror strip"
-# RDEPEND="
-#     media-libs/libpng:1.2
-#     dev-libs/openssl:0.9.8"
-RDEPEND="x11-libs/qt-core:4
-         x11-libs/qt-gui:4
-         x11-libs/qt-svg:4
-         x11-libs/qt-webkit:4
-         x11-libs/qt-xmlpatterns:4
-         dev-lang/python:2.7"
+
+RDEPEND="
+    !qt-bundled? (
+        <x11-libs/qt-core-4.8
+        <x11-libs/qt-gui-4.8
+        <x11-libs/qt-svg-4.8
+        <x11-libs/qt-webkit-4.8
+        <x11-libs/qt-xmlpatterns-4.8
+    )
+    qt-bundled? (
+        media-libs/libpng:1.2
+    )
+    dev-lang/python:2.7
+    dev-libs/openssl:0.9.8"
 DEPEND="${RDEPEND}"
 
-
-S="${WORKDIR}/${P}-${LNXARCH}"
-# S="${WORKDIR}/${PN}-${PV:0:3}-${LNXARCH}"
+if   [[ "${ARCH}" == "x86" ]]; then
+    S=${WORKDIR}/${ARCHIVE_X86/.tar.bz2/}
+elif [[ "${ARCH}" == "amd64" ]]; then
+    S=${WORKDIR}/${ARCHIVE_AMD64/.tar.bz2/}
+fi
 
 MENDELEY_INSTALL_DIR="/opt/${PN}"
 
@@ -69,6 +75,13 @@ src_install() {
     dosym "${MENDELEY_INSTALL_DIR}/bin/${PN}" "/usr/bin/${PN}"
     sed -i '1s@^#!/usr/bin/python$@&2@' ${D}${MENDELEY_INSTALL_DIR}/bin/${PN} || die "Can't sed for python2"
 
-    # Delete bundled Qt
-    rm -fr ${D}${MENDELEY_INSTALL_DIR}/lib/qt || die "Can't delete qt folder"
+    if use qt-bundled; then
+        sed -i 's/^Exec.*$/& --force-bundled-qt/' "${D}/usr/share/applications/${PN}.desktop" || die "Can't sed"
+    else
+        # Delete bundled Qt
+        rm -fr ${D}${MENDELEY_INSTALL_DIR}/lib/qt || die "Can't delete qt folder"
+    fi
+
+    # Delete bundled OpenSSL 0.9.8
+    rm -fr ${D}${MENDELEY_INSTALL_DIR}/lib/ssl || die "Can't delete ssl folder"
 }
