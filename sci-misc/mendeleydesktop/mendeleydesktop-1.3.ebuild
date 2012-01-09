@@ -23,16 +23,19 @@ SRC_URI="
 LICENSE="Mendelay-EULA"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="qt-bundled"
 RESTRICT="mirror strip"
 # RDEPEND="
 #     media-libs/libpng:1.2
 #     dev-libs/openssl:0.9.8"
-RDEPEND="x11-libs/qt-core:4
-         x11-libs/qt-gui:4
-         x11-libs/qt-svg:4
-         x11-libs/qt-webkit:4
-         x11-libs/qt-xmlpatterns:4
+RDEPEND="
+    !qt-bundled? (
+        <x11-libs/qt-core-4.8
+        <x11-libs/qt-gui-4.8
+        <x11-libs/qt-svg-4.8
+        <x11-libs/qt-webkit-4.8
+        <x11-libs/qt-xmlpatterns-4.8
+    )
          dev-lang/python:2.7"
 DEPEND="${RDEPEND}"
 
@@ -71,6 +74,10 @@ src_install() {
     dosym "${MENDELEY_INSTALL_DIR}/bin/${PN}" "/usr/bin/${PN}"
     sed -i '1s@^#!/usr/bin/python$@&2@' ${D}${MENDELEY_INSTALL_DIR}/bin/${PN} || die "Can't sed for python2"
 
-    # Delete bundled Qt
-    rm -fr ${D}${MENDELEY_INSTALL_DIR}/lib/qt || die "Can't delete qt folder"
+    if use qt-bundled; then
+        sed -i 's/^Exec.*$/& --force-bundled-qt/' "${D}/usr/share/applications/${PN}.desktop" || die "Can't sed"
+    else
+        # Delete bundled Qt
+        rm -fr ${D}${MENDELEY_INSTALL_DIR}/lib/qt || die "Can't delete qt folder"
+    fi
 }
