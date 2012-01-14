@@ -18,5 +18,5 @@ SLOT="0"
 KEYWORDS=""
 LICENSE="GPL2"
 
-DEPEND="dev-python/pyside"
+DEPEND="dev-python/pyside dev-util/bugseverywhere"
 RDEPEND="${DEPEND}"
