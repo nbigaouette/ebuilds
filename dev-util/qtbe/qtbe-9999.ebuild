@@ -19,5 +19,4 @@ KEYWORDS=""
 LICENSE="GPL2"
 
 DEPEND="dev-python/pyside"
-
-RDEPEND="${CDEPEND}"
+RDEPEND="${DEPEND}"
