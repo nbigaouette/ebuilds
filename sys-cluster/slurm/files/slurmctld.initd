@@ -22,6 +22,14 @@ create_folder_and_set_permission() {
     [[ ! -d "${folder}" ]]  && mkdir -p ${folder}
 
     # Fix permissions (/tmp is wiped at boot)
+    if [[ "${folder}" == "/tmp" ]]; then
+        eerror "SLURM: folder == ${folder} == /tmp"
+        exit
+    fi
+    if [[ "${folder}" == "/var/tmp" ]]; then
+        eerror "SLURM: folder == ${folder} == /var/tmp"
+        exit
+    fi
     chown slurm:slurm -R ${folder}
 }
 
@@ -35,7 +43,7 @@ checkconfig() {
 
     # Make sure folders exists
     . /etc/slurm/slurm.conf
-    folders=(${SlurmdSpoolDir} `dirname ${SlurmctldLogFile}` `dirname ${SlurmctldPidFile}` `dirname ${SlurmdLogFile}` `dirname ${SlurmdPidFile}` `dirname ${SlurmdSpoolDir}` `dirname ${StateSaveLocation}`)
+    folders=(${SlurmdSpoolDir} `dirname ${SlurmctldLogFile}` `dirname ${SlurmctldPidFile}` `dirname ${SlurmdLogFile}` `dirname ${SlurmdPidFile}` ${SlurmdSpoolDir} ${StateSaveLocation})
     for folder in ${folders[*]}; do
         create_folder_and_set_permission ${folder}
     done
