@@ -179,6 +179,9 @@ pkg_postinst() {
     elog "            [*]     Memory Resource Controller for Control Groups"
     elog "            [*]   Group CPU scheduler  --->"
     elog "                [*]   Group scheduling for SCHED_OTHER"
+    elog "Then, set these options in /etc/slurm/slurm.conf:"
+    elog "    ProctrackType=proctrack/cgroup"
+    elog "    TaskPlugin=task/cgroup"
     echo
     ewarn "Paths were created for slurm. Please use these paths in /etc/slurm/slurm.conf:"
     for folder_path in ${paths[@]}; do
