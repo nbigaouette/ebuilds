@@ -128,10 +128,10 @@ src_install() {
     # cgroups support
     exeinto /etc/slurm/cgroup
     doexe etc/cgroup.release_common.example
-    mv ${D}/etc/cgroup.release_common.example ${D}/etc/cgroup/release_common
-    ln -s cgroup.release_common ${D}/etc/cgroup/release_cpuset
-    ln -s cgroup.release_common ${D}/etc/cgroup/release_devices
-    ln -s cgroup.release_common ${D}/etc/cgroup/release_freezer
+    mv ${D}/etc/slurm/cgroup/cgroup.release_common.example ${D}/etc/slurm/cgroup/release_common || die "Can't move cgroup.release_common.example"
+    ln -s release_common ${D}/etc/slurm/cgroup/release_cpuset  || die "Can't create symbolic link release_cpuset"
+    ln -s release_common ${D}/etc/slurm/cgroup/release_devices || die "Can't create symbolic link release_devices"
+    ln -s release_common ${D}/etc/slurm/cgroup/release_freezer || die "Can't create symbolic link release_freezer"
 }
 
 pkg_preinst() {
