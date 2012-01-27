@@ -124,6 +124,14 @@ src_install() {
     # Install logrotate file
     insinto /etc/logrotate.d
     newins "${FILESDIR}/logrotate" slurm || die
+
+    # cgroups support
+    exeinto /etc/slurm/cgroup
+    doexe etc/cgroup.release_common.example
+    mv ${D}/etc/cgroup.release_common.example ${D}/etc/cgroup/release_common
+    ln -s cgroup.release_common ${D}/etc/cgroup/release_cpuset
+    ln -s cgroup.release_common ${D}/etc/cgroup/release_devices
+    ln -s cgroup.release_common ${D}/etc/cgroup/release_freezer
 }
 
 pkg_preinst() {
