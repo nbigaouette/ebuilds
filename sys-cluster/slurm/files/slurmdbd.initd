@@ -3,7 +3,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-opts="reload"
+extra_commands="reload"
 
 [[ -f /etc/conf.d/slurm ]] && . /etc/conf.d/slurm
 
