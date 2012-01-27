@@ -167,6 +167,19 @@ pkg_postinst() {
     elog "through a (javascript enabled) browser to create a configureation file."
     elog "Copy that file to /etc/slurm/slurm.conf on all nodes (including the headnode) of your cluster."
     echo
+    elog "For cgroup support, please see http://www.schedmd.com/slurmdocs/cgroup.conf.html"
+    elog "Your kernel must be compiled with the wanted cgroup feature:"
+    elog "    General setup  --->"
+    elog "        [*] Control Group support  --->"
+    elog "            [*]   Freezer cgroup subsystem"
+    elog "            [*]   Device controller for cgroups"
+    elog "            [*]   Cpuset support"
+    elog "            [*]   Simple CPU accounting cgroup subsystem"
+    elog "            [*]   Resource counters"
+    elog "            [*]     Memory Resource Controller for Control Groups"
+    elog "            [*]   Group CPU scheduler  --->"
+    elog "                [*]   Group scheduling for SCHED_OTHER"
+    echo
     ewarn "Paths were created for slurm. Please use these paths in /etc/slurm/slurm.conf:"
     for folder_path in ${paths[@]}; do
     ewarn "    ${folder_path}"
