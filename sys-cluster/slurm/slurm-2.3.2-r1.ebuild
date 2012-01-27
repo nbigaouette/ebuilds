@@ -48,18 +48,21 @@ src_prepare() {
         -i "${S}/etc/cgroup.conf.example" \
         -i "${S}/etc/cgroup.release_common.example" \
         -i "${S}/src/common/xcgroup.h" \
-        || die
+        || die "Can't sed for /dev/cgroup"
     # and pids should go to /var/run/slurm
     sed -e 's:/var/run/slurmctld.pid:/var/run/slurm/slurmctld.pid:g' \
         -e 's:/var/run/slurmd.pid:/var/run/slurm/slurmd.pid:g' \
-        -i "${S}/etc/slurm.conf.example"
+        -i "${S}/etc/slurm.conf.example" \
+        || die "Can't sed for /var/run/slurmctld.pid"
     # also state dirs are in /var/spool/slurm
     sed -e 's:StateSaveLocation=*.:StateSaveLocation=/var/spool/slurm:g' \
         -e 's:SlurmdSpoolDir=*.:SlurmdSpoolDir=/var/spool/slurm/slurmd:g' \
-        -i "${S}/etc/slurm.conf.example"
+        -i "${S}/etc/slurm.conf.example" \
+        || die "Can't sed for StateSaveLocation=*."
     # and tmp should go to /var/tmp/slurm
     sed -e 's:/tmp:/var/tmp:g' \
-        -i "${S}/etc/slurm.conf.example"
+        -i "${S}/etc/slurm.conf.example" \
+        || die "Can't sed for StateSaveLocation=*./tmp"
 }
 
 src_configure() {
