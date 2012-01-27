@@ -86,7 +86,7 @@ src_configure() {
     # --htmldir does not seems to propagate... Documentations are installed
     # in /usr/share/doc/slurm-2.3.0/html
     # instead of /usr/share/doc/slurm-2.3.0.2/html
-    sed -e "s|htmldir = .*/html|htmldir = \${prefix}/share/doc/slurm-${PV}/html|g" -i doc/html/Makefile || die
+    sed -e "s|htmldir = .*/html|htmldir = \${prefix}/share/doc/slurm-${PVR}/html|g" -i doc/html/Makefile || die
 }
 
 src_compile() {
