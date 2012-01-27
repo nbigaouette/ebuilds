@@ -42,13 +42,15 @@ pkg_setup() {
 }
 
 src_prepare() {
-    # gentoo uses /sys/fs/cgroup instead of /dev/cgroup
-    sed -e 's:/dev/cgroup:/sys/fs/cgroup:g' \
+    # Gentoo uses /sys/fs/cgroup instead of /cgroup
+    # FIXME: Can the "^/cgroup" and "\([ =\"]\)/cgroup" patterns be merged?
+    sed \
+        -e 's|\([ =\"]\)/cgroup|\1/sys/fs/cgroup|g' \
+        -e "s|^/cgroup|/sys/fs/cgroup|g" \
         -i "${S}/doc/man/man5/cgroup.conf.5" \
-        -i "${S}/etc/cgroup.conf.example" \
         -i "${S}/etc/cgroup.release_common.example" \
-        -i "${S}/src/common/xcgroup.h" \
-        || die "Can't sed for /dev/cgroup"
+        -i "${S}/src/common/xcgroup_read_config.c" \
+        || die "Can't sed /cgroup for /sys/fs/cgroup"
     # and pids should go to /var/run/slurm
     sed -e 's:/var/run/slurmctld.pid:/var/run/slurm/slurmctld.pid:g' \
         -e 's:/var/run/slurmd.pid:/var/run/slurm/slurmd.pid:g' \
