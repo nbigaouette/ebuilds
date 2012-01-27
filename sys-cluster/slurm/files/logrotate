@@ -1,7 +1,20 @@
 /var/log/slurm/*.log {
-    compress
-    rotate 4
     weekly
+    compress
     missingok
+    nocopytruncate
+    nocreate
+    nodelaycompress
+    nomail
     notifempty
+    noolddir
+    rotate 5
+    sharedscripts
+    size=5M
+    create 640 slurm slurm
+    postrotate
+        /etc/init.d/slurmd reload
+        /etc/init.d/slurmctld reload
+        /etc/init.d/slurmdbd reload
+    endscript
 }
