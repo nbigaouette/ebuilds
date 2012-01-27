@@ -60,7 +60,7 @@ src_prepare() {
     sed -e 's:StateSaveLocation=*.:StateSaveLocation=/var/spool/slurm:g' \
         -e 's:SlurmdSpoolDir=*.:SlurmdSpoolDir=/var/spool/slurm/slurmd:g' \
         -i "${S}/etc/slurm.conf.example" \
-        || die "Can't sed for StateSaveLocation=*."
+        || die "Can't sed ${S}/etc/slurm.conf.example for StateSaveLocation=*. or SlurmdSpoolDir=*"
     # and tmp should go to /var/tmp/slurm
     sed -e 's:/tmp:/var/tmp:g' \
         -i "${S}/etc/slurm.conf.example" \
