@@ -25,7 +25,7 @@ RDEPEND="pbs? ( sys-cluster/torque )
 	slurm? ( sys-cluster/slurm )
 	infiniband? ( sys-infiniband/libibverbs )
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
-	>=sys-apps/hwloc-1.1.1
+	>=sys-apps/hwloc-1.3.1
 	$(mpi_imp_deplist)"
 DEPEND="${RDEPEND}"
 REQUIRED_USE="pbs? ( !slurm )
