@@ -29,6 +29,6 @@ pkg_setup() {
 }
 
 src_install() {
-	DIST_ROOT="${D}" emake install
-	dodoc CHANGELOG README
+    DIST_ROOT="${D}" emake install
+    dodoc CHANGELOG README
 }
