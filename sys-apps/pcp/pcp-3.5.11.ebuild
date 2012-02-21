@@ -33,6 +33,6 @@ src_install() {
     dodoc CHANGELOG README
 
     # Move some file around
-    mv ${D}etc/bash_completion.d/pcp ${D}usr/share/bash-completion/pcp
-    ln -s /usr/share/bash-completion/pcp ${D}etc/bash_completion.d/pcp
+    dodir /usr/share/bash-completion
+    mv ${D}etc/bash_completion.d/pcp ${D}usr/share/bash-completion/pcp || die "Can't move bash completion script."
 }
