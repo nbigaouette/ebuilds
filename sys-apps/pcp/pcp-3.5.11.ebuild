@@ -31,4 +31,8 @@ pkg_setup() {
 src_install() {
     DIST_ROOT="${D}" emake install
     dodoc CHANGELOG README
+
+    # Move some file around
+    mv ${D}etc/bash_completion.d/pcp ${D}usr/share/bash-completion/pcp
+    ln -s /usr/share/bash-completion/pcp ${D}etc/bash_completion.d/pcp
 }
