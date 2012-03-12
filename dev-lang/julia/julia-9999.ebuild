@@ -55,7 +55,6 @@ src_prepare() {
             -e "s|USE_SYSTEM_SUITESPARSE=.*|USE_SYSTEM_SUITESPARSE=1|g" \
             -e "s|USE_SYSTEM_PCRE=.*|USE_SYSTEM_PCRE=1|g" \
             -i Make.inc || die "Can't sed."
-        epatch ${FILESDIR}/0001-Use-system-wide-dsfmt-suitesparse-wrapper-and-gmp-wr.patch
 
         # https://github.com/JuliaLang/julia/issues/450
         mkdir -p ${WORKDIR}/${P}/external/root/lib || die "Can't creat external/root/lib folder."
@@ -68,7 +67,6 @@ src_prepare() {
 
 src_compile() {
     cd external || die "Could not enter 'external' directory!"
-    make install-dsfmt install-suitesparse install-gmp-wrapper || die "Could not compile included dependencies!"
 
     # Create libsuitesparse.{so,a} from all sci-libs/suitesparse different libraries
     if use builtin; then
