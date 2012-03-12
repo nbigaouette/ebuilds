@@ -68,7 +68,7 @@ src_prepare() {
 
 src_compile() {
     cd external || die "Could not enter 'external' directory!"
-    make install-dsfmt install-suitesparse || die "Could not compile included dependencies!"
+    make install-dsfmt install-suitesparse install-gmp-wrapper || die "Could not compile included dependencies!"
 
     # Create libsuitesparse.{so,a} from all sci-libs/suitesparse different libraries
     if use builtin; then
@@ -108,4 +108,7 @@ src_install() {
     ln -s /$(get_libdir)/libpcre.so.0 ${D}/usr/share/julia/lib/libpcre.so || die "Can't add symbolic link to pcre"
 }
 
-
+src_test() {
+    cd ${S}/test    || die "Can't cd into test directory"
+    make            || die "Running tests failed"
+}
