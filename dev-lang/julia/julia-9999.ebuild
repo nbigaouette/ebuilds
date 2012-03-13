@@ -16,7 +16,7 @@ SRC_URI=""
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+builtin"
+IUSE="+builtin lighttpd"
 
 RDEPEND="
     !builtin? (
@@ -30,7 +30,8 @@ RDEPEND="
         dev-libs/gmp
         sys-libs/libunwind
         dev-libs/libpcre
-    )"
+    )
+    lighttpd? ( www-servers/lighttpd )"
 DEPEND="
     sys-devel/make
     dev-vcs/git
@@ -94,8 +95,8 @@ src_compile() {
 src_install() {
     emake install DESTDIR=${D} PREFIX=/usr
     dosym ${D}/usr/share/julia/julia /usr/bin/julia
-    dosym ${D}/usr/share/julia/julia-release-basic /usr/bin/julia-release-basic
-    dosym ${D}/usr/share/julia/julia-release-webserver /usr/bin/julia-release-webserver
+    dosym ${D}/usr/share/julia/julia-release-basic /usr/bin/julia-basic
+    dosym ${D}/usr/share/julia/julia-release-webserver /usr/bin/julia-webserver
 
     # Delete libraries used for compilation
     rm -f ${D}/usr/share/julia/lib/libpcre.so
