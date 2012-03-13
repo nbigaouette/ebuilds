@@ -26,7 +26,7 @@ DEPEND="
     !builtin? (
         >=sys-devel/llvm-3.0
         sys-libs/readline
-        sci-libs/blas-atlas
+        virtual/blas
         virtual/lapack
         sci-libs/suitesparse
         sci-libs/arpack
@@ -35,8 +35,7 @@ DEPEND="
         sys-libs/libunwind
         dev-libs/libpcre
     )"
-RDEPEND="${DEPEND}
-    "
+RDEPEND="${DEPEND}"
 
 #         sci-libs/openblas
 
