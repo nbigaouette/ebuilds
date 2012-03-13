@@ -6,7 +6,7 @@ EAPI=4
 
 EGIT_REPO_URI="git://github.com/JuliaLang/julia.git"
 
-inherit git-2 eutils versionator pam
+inherit git-2 eutils
 
 
 DESCRIPTION="The Julia Language: a fresh approach to technical computing"
