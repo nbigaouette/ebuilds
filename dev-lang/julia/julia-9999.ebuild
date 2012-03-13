@@ -18,11 +18,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+builtin"
 
-DEPEND="
-    sys-devel/make
-    dev-vcs/git
-    dev-lang/perl
-    sys-devel/m4
+RDEPEND="
     !builtin? (
         >=sys-devel/llvm-3.0
         sys-libs/readline
@@ -35,9 +31,12 @@ DEPEND="
         sys-libs/libunwind
         dev-libs/libpcre
     )"
-RDEPEND="${DEPEND}"
-
-#         sci-libs/openblas
+DEPEND="
+    sys-devel/make
+    dev-vcs/git
+    dev-lang/perl
+    sys-devel/m4
+    ${RDEPEND}"
 
 src_prepare() {
     # Use system packages instead of included ones
