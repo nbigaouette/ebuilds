@@ -148,7 +148,7 @@ src_install() {
 
     # Install profiler
     if use profiler; then
-        _PROF_P=`ls tools`
+        _PROF_P=`\ls tools`
         _PROF_PV=${_PROF_P/*-/}
         _PROF_PN=${_PROF_P/-*/}
         cat tools/${_PROF_P}/License.txt > ${D}/usr/portage/licenses/${_PROF_P} || die "Can't copy CLPerfMarker's license."
