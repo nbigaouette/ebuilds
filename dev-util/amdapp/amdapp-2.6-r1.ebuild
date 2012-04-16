@@ -37,8 +37,7 @@ RDEPEND="app-admin/eselect-opengl
         media-libs/freeglut
         || ( dev-util/opencl-headers dev-util/nvidia-cuda-toolkit >=x11-drivers/ati-drivers-11.12[opencl] )
         examples? ( media-libs/glew )
-        eselect? ( app-admin/eselect-opencl )
-        multilib? ( app-emulation/emul-linux-x86-opengl )"
+        eselect? ( app-admin/eselect-opencl )"
 DEPEND="${RDEPEND}
         dev-lang/perl
         !<dev-util/amdstream-2.6"
