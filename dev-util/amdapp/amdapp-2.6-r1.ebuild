@@ -146,28 +146,6 @@ src_install() {
         ln -s libOpenCL.so.1 ${D}/usr/lib64/OpenCL/vendors/amd/libOpenCL.so
     fi
 
-    # Install profiler
-    if use profiler; then
-        _PROF_P=`\ls tools`
-        _PROF_PV=${_PROF_P/*-/}
-        _PROF_PN=${_PROF_P/-*/}
-        cat tools/${_PROF_P}/License.txt > ${D}/usr/portage/licenses/${_PROF_P} || die "Can't copy CLPerfMarker's license."
-
-        dobin tools/${_PROF_P}/${_arch}/sprofile
-        dolib tools/${_PROF_P}/${_arch}/*.so
-
-        # CLPerfMarker
-        # FIXME: there is bin/x86/libCLPerfMarker32.so and x86_64/libCLPerfMarker.so...
-        dolib tools/${_PROF_P}/CLPerfMarker/bin/${_arch}/*.so
-        insinto /usr/include
-        doins tools/${_PROF_P}/CLPerfMarker/include/*
-        if use doc; then
-            dodoc tools/${_PROF_P}/CLPerfMarker/doc/*
-            cp -r tools/${_PROF_P}/html   ${D}/usr/share/doc/${P}/CLPerfMarker  || die "Can't copy CLPerfMarker's doc folder."
-            cp -r tools/${_PROF_P}/jqPlot ${D}/usr/share/doc/${P}/              || die "Can't copy CLPerfMarker's jqPlot folder."
-        fi
-    fi
-
     # Register ICD
     # http://www.khronos.org/registry/cl/extensions/khr/cl_khr_icd.txt
     insinto /etc/OpenCL/vendors/
@@ -192,4 +170,31 @@ src_install() {
     doenvd 99${PN}
 
     echo "${_installdir}/$(get_libdir)" > ${D}/etc/ld.so.conf.d/99amdapp.conf
+
+    # Install profiler
+    if use profiler; then
+        _PROF_P=`\ls tools`
+        _PROF_PV=${_PROF_P/*-/}
+        _PROF_PN=${_PROF_P/-*/}
+        cat tools/${_PROF_P}/License.txt > ${D}/usr/portage/licenses/${_PROF_P} || die "Can't copy CLPerfMarker's license."
+
+        dobin tools/${_PROF_P}/${_arch}/sprofile
+        dolib tools/${_PROF_P}/${_arch}/*.so
+
+        # CLPerfMarker
+        # FIXME: there is bin/x86/libCLPerfMarker32.so and x86_64/libCLPerfMarker.so...
+        dolib tools/${_PROF_P}/CLPerfMarker/bin/${_arch}/*.so
+        insinto /usr/include
+        doins tools/${_PROF_P}/CLPerfMarker/include/*
+
+        if use doc; then
+            docinto CLPerfMarker
+            dodoc tools/${_PROF_P}/CLPerfMarker/doc/*
+#             cp -r tools/${_PROF_P}/html   ${D}/usr/share/doc/${P}/CLPerfMarker  || die "Can't copy CLPerfMarker's doc folder."
+#             cp -r tools/${_PROF_P}/jqPlot ${D}/usr/share/doc/${P}/              || die "Can't copy CLPerfMarker's jqPlot folder."
+#             newdoc tools/${_PROF_P}/html CLPerfMarker
+            dodoc -r tools/${_PROF_P}/jqPlot
+            dodoc -r tools/${_PROF_P}/html
+        fi
+    fi
 }
