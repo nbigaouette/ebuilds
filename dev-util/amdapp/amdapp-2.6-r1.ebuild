@@ -182,4 +182,6 @@ src_install() {
     # Create env file
     echo "ATISTREAMSDKROOT=${_installdir}" > 99${PN}
     doenvd 99${PN}
+
+    echo "${_installdir}/$(get_libdir)" > ${D}/etc/ld.so.conf.d/99amdapp.conf
 }
