@@ -173,6 +173,14 @@ src_install() {
     insinto /etc/OpenCL/vendors/
     doins ../etc/OpenCL/vendors/*
 
+    # Install examples
+    if use examples; then
+        insinto ${_installdir}/examples
+        doins -r samples
+        doins -r make
+        doins Makefile
+    fi
+
     if use doc; then
         for f in docs/opencl/*; do
             dodoc $f
