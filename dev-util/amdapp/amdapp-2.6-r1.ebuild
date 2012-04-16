@@ -130,14 +130,20 @@ src_install() {
     doins lib/x86/{libamdocl32.so,libSlotMaximizerAg.so,libSlotMaximizerBe.so}
     insinto ${_installdir}/lib32
     doins lib/x86/{libGLEW.so,libglut.so}
+    # libOpenCL.so
+    insinto /usr/lib32/OpenCL/vendors/amd
     doins lib/x86/libOpenCL.so.1
+    ln -s libOpenCL.so.1 ${D}/usr/lib32/OpenCL/vendors/amd/libOpenCL.so
     # 64 bits
     if use amd64; then
         insinto /usr/lib64
         doins lib/x86_64/{libamdocl64.so,libSlotMaximizerAg.so,libSlotMaximizerBe.so}
         insinto ${_installdir}/lib64
         doins lib/x86_64/{libGLEW.so,libglut.so}
+        # libOpenCL.so
+        insinto /usr/lib64/OpenCL/vendors/amd
         doins lib/x86_64/libOpenCL.so.1
+        ln -s libOpenCL.so.1 ${D}/usr/lib64/OpenCL/vendors/amd/libOpenCL.so
     fi
 
     # Install profiler
