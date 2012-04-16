@@ -172,12 +172,6 @@ src_install() {
     # http://www.khronos.org/registry/cl/extensions/khr/cl_khr_icd.txt
     insinto /etc/OpenCL/vendors/
     doins ../etc/OpenCL/vendors/*
-#     # The icd file just contains the filename. Set it to absolute path
-#     for _arch in 32 64; do
-#         icd_file="${D}/etc/OpenCL/vendors/amdocl${_arch}.icd"
-#         icd_file_content=`cat ${icd_file}`
-#         echo "${_installdir}/usr/lib${_arch}/`basename ${icd_file_content}`" > ${icd_file}
-#     done
 
     if use doc; then
         for f in docs/opencl/*; do
