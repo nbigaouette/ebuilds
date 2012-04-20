@@ -6,7 +6,7 @@ EAPI=4
 
 EGIT_REPO_URI="git://github.com/JuliaLang/julia.git"
 
-inherit git-2 eutils
+inherit git-2 eutils webapp
 
 
 DESCRIPTION="The Julia Language: a fresh approach to technical computing"
@@ -14,9 +14,9 @@ HOMEPAGE="http://julialang.org/"
 SRC_URI=""
 
 LICENSE="GPL-2"
-SLOT="0"
+# SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+builtin lighttpd"
+IUSE="builtin webapp"
 
 RDEPEND="
     !builtin? (
@@ -30,8 +30,8 @@ RDEPEND="
         dev-libs/gmp
         sys-libs/libunwind
         dev-libs/libpcre
-    )
-    lighttpd? ( www-servers/lighttpd )"
+        webapp? ( www-servers/lighttpd )
+    )"
 DEPEND="
     sys-devel/make
     dev-vcs/git
@@ -65,7 +65,7 @@ src_prepare() {
 }
 
 src_compile() {
-    cd external || die "Could not enter 'external' directory!"
+    cd ${S}/external || die "Could not enter 'external' directory!"
 
     # Create libsuitesparse.{so,a} from all sci-libs/suitesparse different libraries
     if use builtin; then
@@ -88,11 +88,22 @@ src_compile() {
             /usr/$(get_libdir)/libufconfig.so \
         ${LIBLAPACK} ${LIBBLAS} -lstdc++ -o ${WORKDIR}/${P}/external/root/lib/libsuitesparse.so
 
+    if use builtin; then
+        if use webapp; then
+            # Download lighttpd
+            cd ${S}/external || die "Could not enter 'external' directory!"
+            elog "Using the included lighttpd has not been tested."
+            make install-lighttpd
+        fi
+    fi
+
     cd ${S} || die "Can't cd into ${S}!"
     emake
 }
 
 src_install() {
+    webapp_src_preinst
+
     emake install DESTDIR=${D} PREFIX=/usr
     dosym ${D}/usr/share/julia/julia /usr/bin/julia
     dosym ${D}/usr/share/julia/julia-release-basic /usr/bin/julia-basic
@@ -103,6 +114,11 @@ src_install() {
     #rm -f ${D}/usr/share/julia/lib/libsuitesparse.so # Until sci-libs/suitesparse creates the file, don't delete it.
 
     ln -s /$(get_libdir)/libpcre.so.0 ${D}/usr/share/julia/lib/libpcre.so || die "Can't add symbolic link to pcre"
+
+    if use webapp; then
+        cd ${S}/ui/website
+        cp -R * ${D}/${MY_HTDOCSDIR}
+    fi
 }
 
 src_test() {
