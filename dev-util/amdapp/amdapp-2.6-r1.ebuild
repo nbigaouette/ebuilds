@@ -9,9 +9,6 @@ inherit eutils
 DESCRIPTION="AMD Accelerated Parallel Processing (APP) SDK (formerly ATI Stream)"
 HOMEPAGE="http://developer.amd.com/sdks/amdappsdk/pages/default.aspx"
 
-_OpenCL_ver_major=1
-_OpenCL_ver_minor=2
-
 _ARCHIVE_NAME="AMD-APP-SDK"
 _ARCHIVE_DONWLOAD_BASE="${_ARCHIVE_NAME}-v${PV}-lnxARCHBASE.tgz"
 _ARCHIVE_UNPACKED_BASE="${_ARCHIVE_NAME}-v${PV}-RC3-lnxARCHBASE.tgz"
