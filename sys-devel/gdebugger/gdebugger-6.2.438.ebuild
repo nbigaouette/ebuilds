@@ -15,7 +15,6 @@ HOMEPAGE="http://developer.amd.com/tools/gDEBugger/Pages/default.aspx"
 if [[ "${ARCH}" == "amd64" ]]; then
     _arch="x86_64"
 elif [[ "${ARCH}" == "x86" ]]; then
-    #_arch="i386"
     _arch="x86"
 fi
 
