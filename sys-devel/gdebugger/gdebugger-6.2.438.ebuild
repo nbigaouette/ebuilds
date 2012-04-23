@@ -43,8 +43,14 @@ src_install() {
 
     cd ..
     cp -a ${S} ${D}${_destination}
-    dosym ${_destination}/${My_PN} /usr/bin/${My_PN}
-    dosym ${_destination}/${My_PN} /usr/bin/${PN}
+
+    # The included launcher gets the directory where it is being run; a symbolic
+    # link to it in /usr/bin thus cannot work. Instead, copy it to /usr/bin and
+    # remove the autodetection of the script's directory and hardcode it to ${_destination}.
+    # Then create a lowercase symbolic link to this new launcher.
+    cp ${D}${_destination}/${My_PN} ${D}/usr/bin/${My_PN}
+    sed "s|gDEBuggerBinariesDir=.*|gDEBuggerBinariesDir=\"${_destination}\"|g" -i ${D}/usr/bin/${My_PN}
+    dosym /usr/bin/${My_PN} /usr/bin/${PN}
 
     html2text ${D}${_destination}/Legal/EndUserLicenseAgreement.htm > ${D}/usr/portage/licenses/${My_PN}.txt || die "Can't copy license"
 
