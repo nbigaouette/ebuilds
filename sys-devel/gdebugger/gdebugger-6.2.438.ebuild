@@ -44,6 +44,7 @@ src_install() {
     cd ..
     cp -a ${S} ${D}${_destination}
     dosym ${_destination}/${My_PN} /usr/bin/${My_PN}
+    dosym ${_destination}/${My_PN} /usr/bin/${PN}
 
     html2text ${D}${_destination}/Legal/EndUserLicenseAgreement.htm > ${D}/usr/portage/licenses/${My_PN}.txt || die "Can't copy license"
 
