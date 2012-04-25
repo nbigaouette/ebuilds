@@ -24,7 +24,7 @@ SRC_URI="
 LICENSE="AMD GPL-1 as-is"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="examples profiler doc +eselect"
+IUSE="examples profiler doc +eselect mesa"
 
 # FIXME: Make sure dependency on ati-drivers is correct.
 RDEPEND="app-admin/eselect-opengl
@@ -37,6 +37,7 @@ RDEPEND="app-admin/eselect-opengl
         eselect? ( app-admin/eselect-opencl )"
 DEPEND="${RDEPEND}
         dev-lang/perl
+        dev-util/patchelf
         !<dev-util/amdstream-2.6"
 
 RESTRICT="mirror strip"
@@ -201,4 +202,12 @@ src_install() {
     # Manually change this.
     _id=${_installdir/lib/`get_libdir`}
     echo "SEARCH_DIRS_MASK=\"${_id} /usr/bin/clinfo  /usr/`get_libdir`/libCLProfileAgent.so /usr/`get_libdir`/libCLTraceAgent.so /usr/`get_libdir`/libGPUPerfAPICL.so\"" > "${D}"/etc/revdep-rebuild/10-${PN}
+
+    # Fix libamdocl64.so's and libamdocl64.so's RPATH to point to MESA
+    # This should fix a conflict when nvidia drivers provide libGL.so.
+    if use mesa; then
+        for libdir in "32" "64"; do
+            patchelf --set-rpath /usr/lib${libdir}/opengl/xorg-x11/lib ${D}/usr/lib${libdir}/libamdocl${libdir}.so
+        done
+    fi
 }
