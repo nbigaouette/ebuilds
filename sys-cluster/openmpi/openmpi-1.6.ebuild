@@ -134,7 +134,7 @@ src_configure() {
 	! use vt && myconf+=(--enable-contrib-no-build=vt)
 
 	# FIXME: Should it be "$(use_with openmpi_rm_pbs tm)" or "$(use_with openmpi_rm_pbs pbs tm)"?
-	econf "${myconf[@]}" \
+	econf $(mpi_econf_args) "${myconf[@]}" \
 		$(use_enable cxx mpi-cxx) \
 		$(use_enable romio io-romio) \
 		$(use_enable heterogeneous) \
