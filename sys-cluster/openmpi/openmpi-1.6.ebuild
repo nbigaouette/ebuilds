@@ -36,6 +36,11 @@ SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux"
 IUSE="+cxx elibc_FreeBSD fortran heterogeneous ipv6 mpi-threads romio threads vt
 	${IUSE_OPENMPI_FABRICS} ${IUSE_OPENMPI_RM} ${IUSE_OPENMPI_OFED_FEATURES}"
+MPI_UNCLASSED_DEP_STR="
+	vt? (
+		!dev-libs/libotf
+		!app-text/lcdf-typetools
+	)"
 
 REQUIRED_USE="openmpi_rm_slurm? ( !openmpi_rm_pbs )
 	openmpi_rm_pbs? ( !openmpi_rm_slurm )
@@ -63,15 +68,14 @@ RDEPEND="
 	openmpi_rm_slurm? ( sys-cluster/slurm )
 	openmpi_ofed_features_rdmacm? ( sys-infiniband/librdmacm )
 	fortran? ( virtual/fortran )
-	vt? (
-		!dev-libs/libotf
-		!app-text/lcdf-typetools
-	)
+	$(mpi_imp_deplist)
 	"
 DEPEND="${RDEPEND}"
 
 pkg_setup() {
 	use fortran && fortran-2_pkg_setup
+	MPI_ESELECT_FILE="eselect.mpi.openmpi"
+
 	if use mpi-threads; then
 		echo
 		ewarn "WARNING: use of MPI_THREAD_MULTIPLE is still disabled by"
@@ -88,14 +92,17 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# Fix --as-needed problems with f77 and f90.
+	# FIXME: Still needed?
+	sed -i 's:^libs=:libs=-Wl,--no-as-needed :' \
+		ompi/tools/wrappers/mpif{77,90}-wrapper-data.txt.in
+
 	# Necessary for scalibility, see
 	# http://www.open-mpi.org/community/lists/users/2008/09/6514.php
 	if use threads; then
 		echo 'oob_tcp_listen_mode = listen_thread' \
 			>> opal/etc/openmpi-mca-params.conf
 	fi
-
-	epatch "${FILESDIR}"/openmpi-r24328.patch
 }
 
 src_configure() {
@@ -126,6 +133,7 @@ src_configure() {
 
 	! use vt && myconf+=(--enable-contrib-no-build=vt)
 
+	# FIXME: Should it be "$(use_with openmpi_rm_pbs tm)" or "$(use_with openmpi_rm_pbs pbs tm)"?
 	econf "${myconf[@]}" \
 		$(use_enable cxx mpi-cxx) \
 		$(use_enable romio io-romio) \
@@ -147,13 +155,14 @@ src_configure() {
 }
 
 src_install () {
-	emake DESTDIR="${D}" install || die "make install failed"
+	emake DESTDIR="${D}" install
 	# From USE=vt see #359917
-	rm "${ED}"/usr/share/libtool &> /dev/null
-	dodoc README AUTHORS NEWS VERSION || die
+	rm "${D}"/$(mpi_root)/usr/share/libtool &> /dev/null
+	mpi_dodoc README AUTHORS NEWS VERSION || die
+	mpi_imp_add_eselect
 }
 
 src_test() {
 	# Doesn't work with the default src_test as the dry run (-n) fails.
-	emake -j1 check || die "emake check failed"
+	emake -j1 check
 }
