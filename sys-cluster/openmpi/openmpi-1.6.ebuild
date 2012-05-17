@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=4
-inherit eutils fortran-2 multilib flag-o-matic toolchain-funcs versionator
+inherit eutils flag-o-matic fortran-2 multilib toolchain-funcs versionator
 
 MY_P=${P/-mpi}
 S=${WORKDIR}/${MY_P}
