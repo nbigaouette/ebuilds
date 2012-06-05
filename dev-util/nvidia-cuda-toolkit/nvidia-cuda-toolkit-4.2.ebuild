@@ -88,7 +88,7 @@ EOF
 	fi
 
 	cat > "${T}/env" << EOF
-PATH=${DEST}/bin
+PATH=${DEST}/bin:${DEST}/libnvvp
 ROOTPATH=${DEST}/bin
 LDPATH=${DEST}/$(get_libdir)
 MANPATH=${DEST}/man
