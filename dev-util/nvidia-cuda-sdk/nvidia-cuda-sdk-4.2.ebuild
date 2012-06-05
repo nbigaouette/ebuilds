@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/nvidia-cuda-sdk/nvidia-cuda-sdk-4.1.ebuild,v 1.3 2012/02/05 16:39:02 spock Exp $
+# $Header: $
 
 EAPI=2
 
@@ -13,13 +13,13 @@ CUDA_V=${PV//_/-}
 DIR_V=${CUDA_V//./_}
 DIR_V=${DIR_V//beta/Beta}
 
-SRC_URI="http://developer.download.nvidia.com/compute/cuda/${DIR_V}/rel/sdk/gpucomputingsdk_${CUDA_V}.28_linux.run"
+SRC_URI="http://developer.download.nvidia.com/compute/cuda/${DIR_V}/rel/sdk/gpucomputingsdk_${CUDA_V}.9_linux.run"
 LICENSE="CUDPP"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug +doc +examples opencl +cuda"
 
-RDEPEND=">=dev-util/nvidia-cuda-toolkit-4.1
+RDEPEND=">=dev-util/nvidia-cuda-toolkit-4.2
 	examples? ( >=x11-drivers/nvidia-drivers-260.19.21 )
 	media-libs/freeglut"
 DEPEND="${RDEPEND}"
