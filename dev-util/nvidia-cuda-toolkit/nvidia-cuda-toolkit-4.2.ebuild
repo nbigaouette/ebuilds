@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/nvidia-cuda-toolkit/nvidia-cuda-toolkit-4.1.ebuild,v 1.7 2012/02/21 21:42:21 spock Exp $
+# $Header: $
 
 EAPI=2
 
@@ -15,8 +15,8 @@ DIR_V=${CUDA_V//./_}
 DIR_V=${DIR_V//beta/Beta}
 
 BASE_URI="http://developer.download.nvidia.com/compute/cuda/${DIR_V}/rel/toolkit"
-SRC_URI="amd64? ( ${BASE_URI}/cudatoolkit_${CUDA_V}.28_linux_64_ubuntu11.04.run )
-	x86? ( ${BASE_URI}/cudatoolkit_${CUDA_V}.28_linux_32_ubuntu11.04.run )"
+SRC_URI="amd64? ( ${BASE_URI}/cudatoolkit_${CUDA_V}.9_linux_64_ubuntu11.04.run )
+	x86? ( ${BASE_URI}/cudatoolkit_${CUDA_V}.9_linux_32_ubuntu11.04.run )"
 
 LICENSE="NVIDIA"
 SLOT="0"
