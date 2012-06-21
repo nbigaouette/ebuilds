@@ -24,24 +24,29 @@ pkg_setup() {
 	linux-info_pkg_setup
 
 	# kernel version check
-	#if kernel_is gt 2 6 38
-	#then
-	#	eerror "${PN} is being developed and tested up to linux-2.6.38."
-	#	eerror "Make sure you have a proper kernel version and point"
-	#	eerror "  /usr/src/linux symlink or env variable KERNEL_DIR to it!"
-	#	die "Wrong kernel version ${KV}"
-	#fi
+	if kernel_is gt 2 6 38
+	then
+		eerror "${PN} is being developed and tested up to linux-2.6.38."
+		eerror "Make sure you have a proper kernel version and point"
+		eerror "  /usr/src/linux symlink or env variable KERNEL_DIR to it!"
+		die "Wrong kernel version ${KV}"
+	fi
 
-    ewarn
-    ewarn "This package is known to have issues with the sandbox"
-    ewarn "If you experience problems, please re-emerge with:"
-    ewarn "FEATURES=\"-sandbox -usersandbox\""
-    ewarn
+	ewarn
+	ewarn "This package is known to have issues with the sandbox"
+	ewarn "If you experience problems, please re-emerge with:"
+	ewarn "FEATURES=\"-sandbox -usersandbox\""
+	ewarn
+
 	linux-mod_pkg_setup
 	MODULE_NAMES="blcr(blcr::${S}/cr_module/kbuild)
 		blcr_imports(blcr::${S}/blcr_imports/kbuild)"
 	BUILD_TARGETS="clean all"
-	ECONF_PARAMS="--with-kernel=${KV_DIR}"
+	#ECONF_PARAMS="--with-kernel=${KV_DIR}"
+	# --with-kernel flag does not exists (see configure --help output)!
+	# The closest is --with-kernel-type, but it's unrelated...
+	# Use --with-linux* instead.
+	ECONF_PARAMS="--with-linux=${KV_DIR} --with-linux-src=${KV_DIR}"
 }
 
 
