@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -6,7 +6,7 @@ inherit linux-mod
 
 DESCRIPTION="Berkeley Lab Checkpoint/Restart for Linux"
 HOMEPAGE="https://ftg.lbl.gov/projects/CheckpointRestart/"
-SRC_URI="http://ftg.lbl.gov/assets/projects/CheckpointRestart/downloads/${P}.tar.gz"
+SRC_URI="https://ftg.lbl.gov/assets/projects/CheckpointRestart/downloads/"${PN}"-"${PV}".tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
@@ -27,21 +27,19 @@ pkg_setup() {
 	MODULE_NAMES="blcr(blcr::${S}/cr_module/kbuild)
 		blcr_imports(blcr::${S}/blcr_imports/kbuild)"
 	BUILD_TARGETS="clean all"
-    # --with-kernel flag does not exists! The closest is --with-kernel-type, but it's unrelated...
-    # Use --with-linux* instead.
-	#ECONF_PARAMS="--with-kernel=${KV_DIR}"
-	ECONF_PARAMS="--with-linux=${KV_DIR} --with-linux-src=${KV_DIR}"
+	ECONF_PARAMS="--with-kernel=${KV_DIR}"
 }
+
 
 src_install() {
 	dodoc README NEWS
-	cd "${S}"/util
+	cd "${S}"/util || die
 	emake DESTDIR="${D}" install || die "binaries install failed"
-	cd "${S}"/libcr
+	cd "${S}"/libcr || die
 	emake DESTDIR="${D}" install || die "libcr install failed"
-	cd "${S}"/man
+	cd "${S}"/man || die
 	emake DESTDIR="${D}" install || die "man install failed"
-	cd "${S}"/include
+	cd "${S}"/include || die
 	emake DESTDIR="${D}" install || die "headers install failed"
 	linux-mod_src_install
 }
