@@ -12,12 +12,26 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
-DEPEND="!>=sys-kernel/gentoo-sources-2.6.39"
+DEPEND=""
 RDEPEND=""
 
 MAKEOPTS="${MAKEOPTS} -j1"
 
+# up to kernel 2.6.38
+
 pkg_setup() {
+	local msg
+	linux-info_pkg_setup
+
+	# kernel version check
+	#if kernel_is gt 2 6 38
+	#then
+	#	eerror "${PN} is being developed and tested up to linux-2.6.38."
+	#	eerror "Make sure you have a proper kernel version and point"
+	#	eerror "  /usr/src/linux symlink or env variable KERNEL_DIR to it!"
+	#	die "Wrong kernel version ${KV}"
+	#fi
+
     ewarn
     ewarn "This package is known to have issues with the sandbox"
     ewarn "If you experience problems, please re-emerge with:"
