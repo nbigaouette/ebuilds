@@ -22,7 +22,11 @@ DEPEND="
 	app-shells/tcsh
 	sys-cluster/charm
 	=sci-libs/fftw-2*
-	dev-lang/tcl"
+	dev-lang/tcl
+	cuda? (
+		>=x11-drivers/nvidia-drivers-270.41.19
+		>=dev-util/nvidia-cuda-toolkit-4.0
+	)"
 
 RDEPEND=${DEPEND}
 
