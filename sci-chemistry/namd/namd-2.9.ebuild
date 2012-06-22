@@ -9,9 +9,8 @@ LICENSE="namd"
 HOMEPAGE="http://www.ks.uiuc.edu/Research/namd/"
 
 MY_PN="NAMD"
-MY_PV="2.8"
 
-SRC_URI="${MY_PN}_${MY_PV}_Source.tar.gz"
+SRC_URI="${MY_PN}_${PV}_Source.tar.gz"
 
 SLOT="0"
 KEYWORDS="~amd64"
@@ -31,15 +30,15 @@ NAMD_ARCH="Linux-x86_64-g++"
 
 NAMD_DOWNLOAD="http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=NAMD"
 
-S="${WORKDIR}/${MY_PN}_${MY_PV}_Source"
+S="${WORKDIR}/${MY_PN}_${PV}_Source"
 
 pkg_nofetch() {
 	echo
-	einfo "Please download ${MY_PN}_${MY_PV}_Source.tar.gz from"
+	einfo "Please download ${MY_PN}_${PV}_Source.tar.gz from"
 	einfo "${NAMD_DOWNLOAD}"
 	einfo "after agreeing to the license and then move it to"
 	einfo "${DISTDIR}"
-	einfo "Be sure to select the ${MY_PV} version!"
+	einfo "Be sure to select the ${PV} version!"
 	echo
 }
 
