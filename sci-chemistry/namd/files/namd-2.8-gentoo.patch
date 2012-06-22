@@ -1,0 +1,120 @@
+diff -ur NAMD_2.8_Source.orig/Make.charm NAMD_2.8_Source/Make.charm
+--- NAMD_2.8_Source.orig/Make.charm	2011-07-30 13:11:21.052330641 -0500
++++ NAMD_2.8_Source/Make.charm	2011-07-30 13:13:16.412798831 -0500
+@@ -2,5 +2,5 @@
+ # The config script will override this setting if there is a directory
+ # called charm-6.3.2 or charm in the NAMD base directory.
+ 
+-CHARMBASE = /Projects/namd2/charm-6.3.2
++CHARMBASE = /usr/include/charm-6.2.1
+ 
+Only in NAMD_2.8_Source: Make.charm.~1~
+diff -ur NAMD_2.8_Source.orig/Makefile NAMD_2.8_Source/Makefile
+--- NAMD_2.8_Source.orig/Makefile	2011-07-30 13:11:21.052330641 -0500
++++ NAMD_2.8_Source/Makefile	2011-07-30 13:15:48.003410162 -0500
+@@ -323,10 +323,10 @@
+ 	$(DSTDIR)/stringhash.o
+ 
+ # definitions for Charm routines
+-CHARMC = $(CHARM)/bin/charmc
+-CHARMXI = $(CHARM)/bin/charmc
+-CHARMINC = $(CHARM)/include $(COPTD)CMK_OPTIMIZE=1
+-CHARMLIB = $(CHARM)/lib
++CHARMC = /usr/bin/charmc
++CHARMXI = /usr/bin/charmc
++CHARMINC = /usr/include/gentoo-charm $(COPTD)CMK_OPTIMIZE=1
++CHARMLIB = /usr/gentoo-libdir
+ 
+ # Libraries we may have changed
+ LIBS = $(CUDAOBJS) $(PLUGINLIB) $(DPMTALIBS) $(DPMELIBS) $(TCLDLL)
+@@ -346,7 +346,7 @@
+ 
+ # Add new executables here.
+ 
+-BINARIES = namd2 psfgen charmrun flipdcd flipbinpdb
++BINARIES = namd2 psfgen flipdcd flipbinpdb
+ 
+ # This should be rebuilt at every compile, but not on Win32.
+ BUILDINFO = $(DSTDIR)/buildinfo
+@@ -378,16 +378,9 @@
+ 	$(EXTRALINKLIBS) \
+ 	-lm -o namd2
+ 
+-charmrun: $(CHARM)/bin/charmrun # XXX
+-	$(COPY) $(CHARM)/bin/charmrun $@
+-
+ $(LIBCUDARTSO):
+ 	$(COPY) $(CUDASODIR)/$(LIBCUDARTSO) $@;
+ 
+-WINDOWSBINARIES = namd2.exe psfgen.exe
+-# WINDOWSBINARIES = namd2.exe psfgen.exe charmd.exe charmd_faceless.exe charmrun.exe
+-windowsbinaries: $(WINDOWSBINARIES)
+-
+ namd2.exe:  $(INCDIR) $(DSTDIR) $(OBJS) $(LIBS) $(TCLDLL)
+ 	$(MAKEBUILDINFO)
+ 	$(CHARMC) -verbose \
+@@ -410,9 +403,6 @@
+ charmd_faceless.exe:
+ 	$(COPY) $(CHARM)/bin/charmd_faceless.exe charmd_faceless.exe
+ 
+-charmrun.exe:
+-	$(COPY) $(CHARM)/bin/charmrun.exe charmrun.exe
+-
+ psfgen:	$(DSTDIR) $(SBOBJS) $(PLUGINOBJS)
+ 	$(CC) $(SBCFLAGS) -o psfgen $(SBOBJS) $(PLUGINOBJS) $(TCLLIB) $(TCLAPPLIB) -lm
+ 
+@@ -630,9 +620,7 @@
+ 
+ DOC_FILES = README.txt announce.txt license.txt notes.txt
+ 
+-RELEASE_FILES = $(LIBCUDARTSO) flipdcd flipbinpdb psfgen charmrun namd2
+-
+-WINDOWS_RELEASE_FILES = $(LIBCUDARTSO) $(WINDOWSBINARIES) $(TCLDLL)
++RELEASE_FILES = $(LIBCUDARTSO) flipdcd flipbinpdb psfgen namd2
+ 
+ release: all
+ 	$(ECHO) Creating release $(RELEASE_DIR_NAME)
+@@ -643,17 +631,9 @@
+ 	for f in `find $(RELEASE_DIR_NAME)/lib -name CVS`; do \
+ 	  /bin/rm -rf $$f; \
+ 	done
+-	if [ -r $(CHARM)/bin/charmd ]; then \
+-	  $(COPY) $(CHARM)/bin/charmd $(RELEASE_DIR_NAME); \
+-	fi
+-	if [ -r $(CHARM)/bin/charmd_faceless ]; then \
+-	  $(COPY) $(CHARM)/bin/charmd_faceless $(RELEASE_DIR_NAME); \
+-	fi
+ 	chmod -R a+rX $(RELEASE_DIR_NAME)
+ 	tar cf $(RELEASE_DIR_NAME).tar $(RELEASE_DIR_NAME)
+ 	gzip $(RELEASE_DIR_NAME).tar
+-	echo $(CHARM)
+-	ls -l $(CHARM)/lib
+ 	-for f in $(RELEASE_FILES); do echo $$f; $(LDD) $(RELEASE_DIR_NAME)/$$f; done
+ 
+ winrelease: winall
+diff -ur NAMD_2.8_Source.orig/arch/Linux-x86_64.fftw NAMD_2.8_Source/arch/Linux-x86_64.fftw
+--- NAMD_2.8_Source.orig/arch/Linux-x86_64.fftw	2011-07-30 13:11:21.052330641 -0500
++++ NAMD_2.8_Source/arch/Linux-x86_64.fftw	2011-07-30 13:12:25.242589102 -0500
+@@ -1,7 +1,7 @@
+ 
+-FFTDIR=/Projects/namd2/fftw/linux-x86_64
++FFTDIR=/usr
+ FFTINCL=-I$(FFTDIR)/include
+-FFTLIB=-L$(FFTDIR)/lib -lsrfftw -lsfftw
++FFTLIB=-L$(FFTDIR)/gentoo-libdir -lsrfftw -lsfftw
+ FFTFLAGS=-DNAMD_FFTW
+ FFT=$(FFTINCL) $(FFTFLAGS)
+ 
+diff -ur NAMD_2.8_Source.orig/arch/Linux-x86_64.tcl NAMD_2.8_Source/arch/Linux-x86_64.tcl
+--- NAMD_2.8_Source.orig/arch/Linux-x86_64.tcl	2011-07-30 13:11:21.052330641 -0500
++++ NAMD_2.8_Source/arch/Linux-x86_64.tcl	2011-07-30 13:12:25.242589102 -0500
+@@ -1,7 +1,7 @@
+ 
+-TCLDIR=/Projects/namd2/tcl/linux-x86_64
++TCLDIR=/usr
+ TCLINCL=-I$(TCLDIR)/include
+-TCLLIB=-L$(TCLDIR)/lib -ltcl8.3 -ldl
++TCLLIB=-L$(TCLDIR)/gentoo-libdir -ltcl8.5 -ldl
+ TCLFLAGS=-DNAMD_TCL
+ TCL=$(TCLINCL) $(TCLFLAGS)
+ 
