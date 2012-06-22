@@ -1,0 +1,41 @@
+--- NAMD_2.9_Source.orig/Makefile	2012-06-22 13:35:29.926895454 -0400
++++ NAMD_2.9_Source/Makefile	2012-06-22 13:36:49.415621031 -0400
+@@ -386,7 +386,7 @@
+ 
+ namd2:	$(MKINCDIR) $(MKDSTDIR) $(OBJS) $(LIBS)
+ 	$(MAKEBUILDINFO)
+-	$(CHARMC) -verbose -ld++-option \
++	$(CHARMC) $(LDFLAGS) -verbose -ld++-option \
+ 	"$(COPTI)$(CHARMINC) $(COPTI)$(INCDIR) $(COPTI)$(SRCDIR) $(CXXOPTS)" \
+ 	"$(CHARM_MODULES)" -language charm++ \
+ 	$(BUILDINFO).o \
+@@ -438,7 +438,7 @@
+ 	$(COPY) $(CHARM)/bin/charmrun.exe charmrun.exe
+ 
+ psfgen:	$(MKDSTDIR) $(SBOBJS) $(PLUGINOBJS)
+-	$(CC) $(SBCFLAGS) -o psfgen $(SBOBJS) $(PLUGINOBJS) $(TCLLIB) $(TCLAPPLIB) -lm
++	$(CC) $(SBCFLAGS) $(LDFLAGS) -o psfgen $(SBOBJS) $(PLUGINOBJS) $(TCLLIB) $(TCLAPPLIB) -lm
+ 
+ psfgen.exe:	$(MKDSTDIR) $(SBOBJS) $(PLUGINOBJS) $(TCLDLL)
+ 	$(CC) $(SBCFLAGS) -o psfgen $(SBOBJS) $(PLUGINOBJS) $(TCLLIB) $(TCLAPPLIB) -lm
+@@ -456,17 +456,17 @@
+ 	$(CC) $(CFLAGS) -o diffbinpdb $(SRCDIR)/diffbinpdb.c -lm
+ 
+ flipdcd:	$(SRCDIR)/flipdcd.c
+-	$(CC) $(CFLAGS) -o $@ $(SRCDIR)/flipdcd.c || \
++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(SRCDIR)/flipdcd.c || \
+ 	echo "#!/bin/sh\necho unavailable on this platform" > $@; \
+ 	chmod +x $@
+ 
+ flipbinpdb:	$(SRCDIR)/flipbinpdb.c
+-	$(CC) $(CFLAGS) -o $@ $(SRCDIR)/flipbinpdb.c || \
++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(SRCDIR)/flipbinpdb.c || \
+ 	echo "#!/bin/sh\necho unavailable on this platform" > $@; \
+ 	chmod +x $@
+ 
+ fixdcd:	$(SRCDIR)/fixdcd.c
+-	$(CC) $(CFLAGS) -o fixdcd $(SRCDIR)/fixdcd.c
++	$(CC) $(CFLAGS) $(LDFLAGS) -o fixdcd $(SRCDIR)/fixdcd.c
+ 
+ dumpdcd:	$(SRCDIR)/dumpdcd.c
+ 	$(CC) $(CFLAGS) -o dumpdcd $(SRCDIR)/dumpdcd.c

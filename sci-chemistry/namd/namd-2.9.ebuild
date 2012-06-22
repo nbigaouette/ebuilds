@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI=4
+
 inherit eutils toolchain-funcs flag-o-matic
 
 DESCRIPTION="A powerful and highly parallelized molecular dynamics code"
@@ -23,6 +25,7 @@ DEPEND="
 	sys-cluster/charm
 	=sci-libs/fftw-2*
 	dev-lang/tcl
+	app-shells/tcsh
 	cuda? (
 		>=x11-drivers/nvidia-drivers-270.41.19
 		>=dev-util/nvidia-cuda-toolkit-4.0
@@ -46,30 +49,29 @@ pkg_nofetch() {
 	echo
 }
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
+src_prepare() {
 
 	CHARM_VERSION=$(best_version sys-cluster/charm | cut -d- -f3)
+	elog "Using CHARM_VERSION=$CHARM_VERSION"
+	rm -f charm-*.tar || die
+
+	sed -e "s|CHARMBASE = .*|CHARMBASE = /usr/include/charm-$CHARM_VERSION|g" -i Make.charm
 
 	# apply a few small fixes to make NAMD compile and
 	# link to the proper libraries
-	epatch "${FILESDIR}"/namd-2.8-gentoo.patch
-	epatch "${FILESDIR}"/namd-2.8-ldflags.patch
-	epatch "${FILESDIR}"/namd-2.7-iml-dec.patch
-	sed -e "s:charm-6.2.1:charm-${CHARM_VERSION}:" \
-		Make.charm || \
-		die
-
-	rm -f charm-6.1.3.tar || die
+	epatch "${FILESDIR}"/namd-2.9-gentoo.patch
+	epatch "${FILESDIR}"/namd-2.9-ldflags.patch
+	#epatch "${FILESDIR}"/namd-2.7-iml-dec.patch
 
 	# proper compiler and cflags
 	sed -e "s/g++/$(tc-getCXX)/" \
 		-e "s/gcc/$(tc-getCC)/" \
-		-e "s/CXXOPTS = -O3 -m64 -fexpensive-optimizations -ffast-math/CXXOPTS = ${CXXFLAGS}/" \
-		-e "s/COPTS = -O3 -m64 -fexpensive-optimizations -ffast-math/COPTS = ${CFLAGS}/" \
+		-e "s/CXXOPTS = .*/CXXOPTS = ${CXXFLAGS}/" \
+		-e "s/COPTS = .*/COPTS = ${CFLAGS}/" \
 		-i arch/${NAMD_ARCH}.arch || \
 		die "Failed to setup ${NAMD_ARCH}.arch"
+		#-e "s/CXXOPTS = -O3 -m64 -fexpensive-optimizations -ffast-math/CXXOPTS = ${CXXFLAGS}/" \
+		#-e "s/COPTS = -O3 -m64 -fexpensive-optimizations -ffast-math/COPTS = ${CFLAGS}/" \
 
 	sed -e "s/gentoo-libdir/$(get_libdir)/g" \
 		-e "s/gentoo-charm/charm-${CHARM_VERSION}/g" \
@@ -79,6 +81,11 @@ src_unpack() {
 	sed -e "s/gentoo-libdir/$(get_libdir)/g" -i arch/Linux-x86_64.tcl || \
 		die "Failed gentooizing Linux-x86_64.tcl."
 
+    # Make sure "obj" directory exists
+    mkdir obj
+}
+
+src_configure() {
 	if use cuda; then
 		CONFIG_OPTIONS="--with-cuda --cuda-prefix /opt/cuda"
 	fi
@@ -90,7 +97,7 @@ src_unpack() {
 src_compile() {
 	# build namd
 	cd "${S}/${NAMD_ARCH}"
-	emake || die "Failed to build namd"
+	emake -j 1
 }
 
 src_install() {
