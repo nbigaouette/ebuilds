@@ -2,9 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI=4
+
 RESTRICT="primaryuri"
 
-EAPI=4
 inherit eutils versionator pam
 
 MY_PV=$(replace_version_separator 3 '-')
