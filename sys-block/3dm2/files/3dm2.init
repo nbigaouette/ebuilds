@@ -1,0 +1,22 @@
+#!/sbin/runscript
+# Copyright 1999-2010 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License, v2 or later
+# $Header$
+
+depend() {
+	need net
+}
+
+start() {
+	ebegin "Starting 3dm2"
+	start-stop-daemon --start --quiet --exec /usr/sbin/3dm2
+	eend ${?}
+}
+
+stop() {
+	ebegin "Stopping 3dm2"
+	start-stop-daemon --stop --quiet --name 3dm2
+	[ "$RETVAL" == 2 ] && return 2
+	start-stop-daemon --stop --quiet --name 3dm2
+	eend ${?}
+}
