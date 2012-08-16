@@ -62,6 +62,7 @@ src_unpack() {
 		src_unpack
 	fi
 
+	cd ${S}
 	for patch_file in ${FILESDIR}/${P}*.patch; do
 		[[ -e ${patch_file} ]] && epatch ${patch_file}
 	done
