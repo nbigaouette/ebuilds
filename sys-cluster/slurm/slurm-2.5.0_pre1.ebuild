@@ -167,8 +167,9 @@ src_install() {
 	# install sample configs
 	keepdir /etc/slurm
 	insinto /etc/slurm
+	doins etc/bluegene.conf.example
 	doins etc/cgroup.conf.example
-	doins etc/federation.conf.example
+	doins etc/cgroup_allowed_devices_file.conf.example
 	doins etc/slurm.conf.example
 	doins etc/slurmdbd.conf.example
 	exeinto /etc/slurm
