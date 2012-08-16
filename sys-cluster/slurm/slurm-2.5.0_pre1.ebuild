@@ -59,7 +59,7 @@ src_unpack() {
 	if [[ ${PV} == *9999* ]]; then
 		git-2_src_unpack
 	else
-		src_unpack
+		[[ "${A}" != "" ]] && unpack ${A}
 	fi
 
 	cd ${S}
