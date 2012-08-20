@@ -3,24 +3,37 @@
 # $Header: $
 
 EAPI=4
-RESTRICT="primaryuri"
 
-inherit eutils versionator pam perl-module
+if [[ ${PV} == *9999* ]]; then
+	EGIT_REPO_URI="git://github.com/SchedMD/slurm.git"
+	EGIT_COMMIT="2a7a4a45b9964a987bc67c8b079349e19e026a56" # Tag 2.4.2
+	INHERIT_GIT="git-2"
+	SRC_URI=""
+	KEYWORDS=""
+else
+	inherit versionator
+	if [[ ${PV} == *pre* || ${PV} == *rc* ]]; then
+		MY_PV=$(replace_version_separator 3 '-0.') # pre-releases or release-candidate
+		MY_branch="development"
+	else
+		MY_PV=$(replace_version_separator 3 '-') # stable releases
+		MY_branch="latest"
+	fi
+	MY_P="${PN}-${MY_PV}"
+	INHERIT_GIT=""
+	SRC_URI="http://www.schedmd.com/download/${MY_branch}/${MY_P}.tar.bz2 http://www.schedmd.com/download/archive/${MY_P}.tar.bz2"
+	KEYWORDS="~amd64 ~x86"
+	S="${WORKDIR}/${MY_P}"
+fi
 
-MY_PV=$(replace_version_separator 3 '-') # stable releases
-#MY_PV=$(replace_version_separator 3 '-0.') # pre-releases
-MY_P="${PN}-${MY_PV}"
-MY_branch="latest"
-#MY_branch="development"
+inherit eutils pam perl-module ${INHERIT_GIT}
 
 DESCRIPTION="SLURM: A Highly Scalable Resource Manager"
 HOMEPAGE="https://computing.llnl.gov/linux/slurm/"
-SRC_URI="http://www.schedmd.com/download/${MY_branch}/${MY_P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
-IUSE="maui +munge mysql pam perl postgres ssl static-libs torque ypbind"
+IUSE="lua maui multiple-slurmd +munge mysql pam perl postgres ssl static-libs torque ypbind"
 
 DEPEND="
 	!sys-cluster/torque
@@ -31,16 +44,29 @@ DEPEND="
 	pam? ( virtual/pam )
 	postgres? ( dev-db/postgresql-base )
 	ssl? ( dev-libs/openssl )
+    lua? ( dev-lang/lua )
+    !lua? ( !dev-lang/lua )
 	>=sys-apps/hwloc-1.1.1-r1"
 RDEPEND="${DEPEND}
 	maui? ( sys-cluster/maui[slurm] )"
 
 REQUIRED_USE="torque? ( perl )"
 
-S="${WORKDIR}/${MY_P}"
-
 LIBSLURM_PERL_S="${WORKDIR}/${P}/contribs/perlapi/libslurm/perl"
 LIBSLURMDB_PERL_S="${WORKDIR}/${P}/contribs/perlapi/libslurmdb/perl"
+
+src_unpack() {
+	if [[ ${PV} == *9999* ]]; then
+		git-2_src_unpack
+	else
+		[[ "${A}" != "" ]] && unpack ${A}
+	fi
+
+	cd ${S}
+	for patch_file in ${FILESDIR}/${P}*.patch; do
+		[[ -e ${patch_file} ]] && epatch ${patch_file}
+	done
+}
 
 pkg_setup() {
 	enewgroup slurm 500
@@ -88,6 +114,7 @@ src_configure() {
 		$(use_with ssl) \
 		$(use_with munge) \
 		$(use_enable static-libs static)
+		$(use_enable multiple-slurmd)
 
 	# --htmldir does not seems to propagate... Documentations are installed
 	# in /usr/share/doc/slurm-2.3.0/html
