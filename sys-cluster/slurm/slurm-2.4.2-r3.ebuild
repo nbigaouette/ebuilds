@@ -6,7 +6,6 @@ EAPI=4
 
 if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="git://github.com/SchedMD/slurm.git"
-	EGIT_COMMIT="2a7a4a45b9964a987bc67c8b079349e19e026a56" # Tag 2.4.2
 	INHERIT_GIT="git-2"
 	SRC_URI=""
 	KEYWORDS=""
