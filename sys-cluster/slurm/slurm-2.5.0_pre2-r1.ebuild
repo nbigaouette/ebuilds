@@ -6,7 +6,6 @@ EAPI=4
 
 if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="git://github.com/SchedMD/slurm.git"
-	EGIT_COMMIT="2a7a4a45b9964a987bc67c8b079349e19e026a56" # Tag 2.4.2
 	INHERIT_GIT="git-2"
 	SRC_URI=""
 	KEYWORDS=""
@@ -33,7 +32,7 @@ HOMEPAGE="https://computing.llnl.gov/linux/slurm/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="maui +munge mysql pam perl postgres ssl static-libs torque ypbind lua"
+IUSE="lua maui multiple-slurmd +munge mysql pam perl postgres ssl static-libs torque ypbind"
 
 DEPEND="
 	!sys-cluster/torque
@@ -114,6 +113,7 @@ src_configure() {
 		$(use_with ssl) \
 		$(use_with munge) \
 		$(use_enable static-libs static)
+		$(use_enable multiple-slurmd)
 
 	# --htmldir does not seems to propagate... Documentations are installed
 	# in /usr/share/doc/slurm-2.3.0/html
