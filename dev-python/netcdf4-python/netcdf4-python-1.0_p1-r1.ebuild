@@ -23,6 +23,7 @@ IUSE=""
 
 RDEPEND="
     dev-python/setuptools
+    dev-python/numpy
     sci-libs/netcdf[hdf5]
     sci-libs/hdf5[szip]"
 DEPEND="${RDEPEND}"
