@@ -17,6 +17,7 @@ IUSE=""
 SLOT="0"
 KEYWORDS=""
 LICENSE="GPL2"
+RDEPEND="dev-python/pyyaml"
 
 src_compile() {
     make
