@@ -32,7 +32,7 @@ RDEPEND="app-admin/eselect-opengl
         sys-devel/gcc
         media-libs/mesa
         media-libs/freeglut
-        || ( dev-util/opencl-headers dev-util/nvidia-cuda-toolkit >=x11-drivers/ati-drivers-11.12[opencl] )
+        || ( dev-util/opencl-headers dev-util/nvidia-cuda-toolkit x11-drivers/ati-drivers )
         examples? ( media-libs/glew )
         app-admin/eselect-opencl"
 DEPEND="${RDEPEND}
