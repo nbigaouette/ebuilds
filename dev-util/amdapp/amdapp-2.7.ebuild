@@ -32,7 +32,7 @@ RDEPEND="app-admin/eselect-opengl
         sys-devel/gcc
         media-libs/mesa
         media-libs/freeglut
-        || ( dev-util/opencl-headers dev-util/nvidia-cuda-toolkit >=x11-drivers/ati-drivers-11.12[opencl] )
+        || ( dev-util/opencl-headers dev-util/nvidia-cuda-toolkit x11-drivers/ati-drivers )
         examples? ( media-libs/glew )
         app-admin/eselect-opencl"
 DEPEND="${RDEPEND}
@@ -114,29 +114,29 @@ src_install() {
 
     # Include lib files
     # libaticalc.so and libaticalrt.so
-    dolib.so lib/*.so
+    #dolib.so lib/*.so
     # Architecture dependant
     # 32 bits
     # FIXME: On pure x86, should /usr/lib32 be used or /usr/lib?
     insinto /usr/lib32
     insopts -m0755
-    doins lib/x86/libamdocl32.so
+    #doins lib/x86/libamdocl32.so
     insinto ${_installdir}/lib32
     doins lib/x86/{libGLEW.so,libglut.so}
     # libOpenCL.so
     insinto /usr/lib32/OpenCL/vendors/amd
-    doins lib/x86/libOpenCL.so.1
-    ln -s libOpenCL.so.1 ${D}/usr/lib32/OpenCL/vendors/amd/libOpenCL.so
+    #doins lib/x86/libOpenCL.so.1
+    #ln -s libOpenCL.so.1 ${D}/usr/lib32/OpenCL/vendors/amd/libOpenCL.so
     # 64 bits
     if use amd64; then
         insinto /usr/lib64
-        doins lib/x86_64/libamdocl64.so
+        #doins lib/x86_64/libamdocl64.so
         insinto ${_installdir}/lib64
         doins lib/x86_64/{libGLEW.so,libglut.so}
         # libOpenCL.so
         insinto /usr/lib64/OpenCL/vendors/amd
-        doins lib/x86_64/libOpenCL.so.1
-        ln -s libOpenCL.so.1 ${D}/usr/lib64/OpenCL/vendors/amd/libOpenCL.so
+        #doins lib/x86_64/libOpenCL.so.1
+        #ln -s libOpenCL.so.1 ${D}/usr/lib64/OpenCL/vendors/amd/libOpenCL.so
     fi
 
     # Register ICD
