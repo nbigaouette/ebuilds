@@ -5,13 +5,13 @@
 EAPI="3"
 
 # python eclass bloat
-PYTHON_DEPEND="2"
+PYTHON_DEPEND="*"
 PYTHON_USE_WITH="tk"
 PYTHON_USE_WITH_OPT="tk"
 SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="3* *-jython 2.7-pypy-*"
-PYTHON_CFLAGS=("2.* + -fno-strict-aliasing")
-PYTHON_CXXFLAGS=("2.* + -fno-strict-aliasing")
+RESTRICT_PYTHON_ABIS="*-jython 2.7-pypy-*"
+PYTHON_CFLAGS=("2.* + -fno-strict-aliasing" "3.* + -fno-strict-aliasing")
+PYTHON_CXXFLAGS=("2.* + -fno-strict-aliasing" "3.* + -fno-strict-aliasing")
 PYTHON_MODNAME="matplotlib mpl_toolkits pylab.py"
 
 WX_GTK_VER="2.8"
@@ -19,8 +19,8 @@ WX_GTK_VER="2.8"
 inherit distutils eutils
 
 DESCRIPTION="Pure python plotting library with matlab like syntax"
-HOMEPAGE="http://matplotlib.sourceforge.net/ http://pypi.python.org/pypi/matplotlib"
-SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+HOMEPAGE="http://matplotlib.org/ http://pypi.python.org/pypi/matplotlib"
+SRC_URI="https://github.com/downloads/${PN}/${PN}/${P}.tar.gz"
 
 IUSE="cairo doc excel examples fltk gtk latex qt4 test tk wxwidgets"
 SLOT="0"
@@ -71,6 +71,8 @@ RDEPEND="${CDEPEND}
 		dev-texlive/texlive-fontsrecommended
 	)
 	qt4? ( || ( dev-python/PyQt4[X] dev-python/pyside[X] ) )"
+
+RESTRICT="mirror"
 
 use_setup() {
 	local uword="${2:-${1}}"
