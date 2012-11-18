@@ -106,12 +106,6 @@ src_prepare() {
 		-e "s/check_for_tk()/$(use tk && echo True || echo False)/" \
 		setup.py || die "sed setup.py failed"
 
-	# remove internal copies of pyparsing
-	rm lib/matplotlib/pyparsing.py || die
-	sed -i \
-		-e 's/matplotlib.pyparsing/pyparsing/g' \
-		lib/matplotlib/{mathtext,fontconfig_pattern}.py \
-		|| die "sed pyparsing failed"
 	distutils_src_prepare
 }
 
