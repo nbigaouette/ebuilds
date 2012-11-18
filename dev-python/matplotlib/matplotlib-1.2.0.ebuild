@@ -86,7 +86,6 @@ use_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-ft-refcount.patch
 	# create setup.cfg (see setup.cfg.template for any changes)
 	cat > setup.cfg <<-EOF
 		[provide_packages]
