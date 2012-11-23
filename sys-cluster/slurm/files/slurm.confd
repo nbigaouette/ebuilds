@@ -4,3 +4,15 @@ SLURMDBD_OPTIONS=""
 SLURMD_OPTIONS=""
 SLURM_USE_MUNGE="0"
 SLURM_USE_YPBIND="0"
+
+# Support for multiple instances of slurmd running on the same node.
+# (requires 'multiple-slurmd' use flag enabled).
+# Create a copy of /etc/init.d/slurmd to a different name (does not
+# matter what) and add it to the run level.
+# The following string will be appended to the PID and log files.
+# Additionally, since this string is given as an argument to
+# slurmd for the hostname, <hostname>${SLURMD_MULTIPLE_SECOND_NAME}
+# must resolve to 127.0.0.1.
+# For example, if the hostname is "node", then "node${SLURMD_MULTIPLE_SECOND_NAME}"
+# must resolve.
+SLURMD_MULTIPLE_SECOND_NAME="GPU"

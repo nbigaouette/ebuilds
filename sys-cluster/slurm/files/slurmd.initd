@@ -7,6 +7,20 @@ extra_commands="reload"
 
 [[ -f /etc/conf.d/slurm ]] && . /etc/conf.d/slurm
 
+hostname="`hostname`"
+
+# To support multiple instances of slurmd on the same node,
+# copy this init script to a different name and uncomment the
+# following line:
+#SLURMD_MULTIPLE_SECOND="1"
+
+if [[ "${SLURMD_MULTIPLE_SECOND}" -eq 1 ]]; then
+    hostname="${hostname}${SLURMD_MULTIPLE_SECOND_NAME}"
+    filenames_extra_str="_${hostname}"
+else
+    filenames_extra_str=""
+fi
+
 depend() {
 	local _need="net"
 	[[ ${SLURM_USE_MUNGE} -ne 0 ]] && _need="${_need} munged"
@@ -51,8 +65,12 @@ start() {
 	# See http://www.open-mpi.org/faq/?category=openfabrics
 	# and https://computing.llnl.gov/linux/slurm/faq.html#rlimit
 	ulimit -l unlimited
+	if [[ "${filenames_extra_str}" != "" ]]; then
+        # Add -N nodeGPU[2-16] as option
+        SLURMD_OPTS="${SLURMD_OPTS} -N ${hostname}"
+    fi
 	start-stop-daemon --start --quiet --background \
-		--pidfile /var/run/slurm/slurmd.pid \
+		--pidfile /var/run/slurm/slurmd${filenames_extra_str}.pid \
 		--user root \
 		--group root \
 		--exec /usr/sbin/slurmd -- ${SLURMD_OPTS}
@@ -61,12 +79,12 @@ start() {
 
 stop() {
 	ebegin "Stopping slurm daemon"
-	start-stop-daemon --stop --pidfile /var/run/slurm/slurmd.pid
+	start-stop-daemon --stop --pidfile /var/run/slurm/slurmd${filenames_extra_str}.pid
 	eend $?
 }
 
 reload() {
 	ebegin "Reloading slurm daemon configuration"
-	start-stop-daemon --signal HUP --pidfile /var/run/slurm/slurmd.pid
+	start-stop-daemon --signal HUP --pidfile /var/run/slurm/slurmd${filenames_extra_str}.pid
 	eend $?
 }
