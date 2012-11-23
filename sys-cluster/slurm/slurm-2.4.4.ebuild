@@ -13,14 +13,12 @@ else
 	inherit versionator
 	if [[ ${PV} == *pre* || ${PV} == *rc* ]]; then
 		MY_PV=$(replace_version_separator 3 '-0.') # pre-releases or release-candidate
-		MY_branch="development"
 	else
 		MY_PV=$(replace_version_separator 3 '-') # stable releases
-		MY_branch="latest"
 	fi
 	MY_P="${PN}-${MY_PV}"
 	INHERIT_GIT=""
-	SRC_URI="http://www.schedmd.com/download/${MY_branch}/${MY_P}.tar.bz2 http://www.schedmd.com/download/archive/${MY_P}.tar.bz2"
+	SRC_URI="http://www.schedmd.com/download/latest/${MY_P}.tar.bz2 http://www.schedmd.com/download/development/${MY_P}.tar.bz2 http://www.schedmd.com/download/archive/${MY_P}.tar.bz2"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${MY_P}"
 fi
@@ -53,6 +51,8 @@ REQUIRED_USE="torque? ( perl )"
 
 LIBSLURM_PERL_S="${WORKDIR}/${P}/contribs/perlapi/libslurm/perl"
 LIBSLURMDB_PERL_S="${WORKDIR}/${P}/contribs/perlapi/libslurmdb/perl"
+
+RESTRICT="mirror"
 
 src_unpack() {
 	if [[ ${PV} == *9999* ]]; then
@@ -113,7 +113,7 @@ src_configure() {
 		$(use_with ssl) \
 		$(use_with munge) \
 		$(use_enable static-libs static) \
-		$(use_enable multiple-slurmd )
+		$(use_enable multiple-slurmd)
 
 	# --htmldir does not seems to propagate... Documentations are installed
 	# in /usr/share/doc/slurm-2.3.0/html
