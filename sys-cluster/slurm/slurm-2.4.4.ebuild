@@ -112,8 +112,8 @@ src_configure() {
 		$(use_enable pam) \
 		$(use_with ssl) \
 		$(use_with munge) \
-		$(use_enable static-libs static)
-		$(use_enable multiple-slurmd)
+		$(use_enable static-libs static) \
+		$(use_enable multiple-slurmd )
 
 	# --htmldir does not seems to propagate... Documentations are installed
 	# in /usr/share/doc/slurm-2.3.0/html
