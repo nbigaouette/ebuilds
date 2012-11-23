@@ -16,10 +16,8 @@ hostname="`hostname`"
 
 if [[ "${SLURMD_MULTIPLE_SECOND}" -eq 1 ]]; then
     hostname="${hostname}${SLURMD_MULTIPLE_SECOND_NAME}"
-    filenames_extra_str="_${hostname}"
-else
-    filenames_extra_str=""
 fi
+filenames_extra_str="_${hostname}"
 
 depend() {
 	local _need="net"
