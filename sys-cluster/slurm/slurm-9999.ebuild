@@ -35,6 +35,7 @@ IUSE="lua maui multiple-slurmd +munge mysql pam perl postgres ssl static-libs to
 DEPEND="
 	!sys-cluster/torque
 	!net-analyzer/slurm
+	!net-analyzer/sinfo
 	mysql? ( dev-db/mysql )
 	munge? ( sys-auth/munge )
 	ypbind? ( net-nds/ypbind )
