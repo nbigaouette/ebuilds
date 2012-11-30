@@ -26,7 +26,7 @@ fi
 inherit eutils pam perl-module ${INHERIT_GIT}
 
 DESCRIPTION="SLURM: A Highly Scalable Resource Manager"
-HOMEPAGE="https://computing.llnl.gov/linux/slurm/"
+HOMEPAGE="http://www.schedmd.com"
 
 LICENSE="GPL-2"
 SLOT="0"
