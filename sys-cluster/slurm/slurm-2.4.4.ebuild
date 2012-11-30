@@ -54,7 +54,7 @@ REQUIRED_USE="torque? ( perl )"
 LIBSLURM_PERL_S="${WORKDIR}/${P}/contribs/perlapi/libslurm/perl"
 LIBSLURMDB_PERL_S="${WORKDIR}/${P}/contribs/perlapi/libslurmdb/perl"
 
-RESTRICT="mirror"
+RESTRICT="primaryuri"
 
 src_unpack() {
 	if [[ ${PV} == *9999* ]]; then
