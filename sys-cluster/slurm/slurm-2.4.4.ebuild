@@ -46,6 +46,7 @@ DEPEND="
     !lua? ( !dev-lang/lua )
 	>=sys-apps/hwloc-1.1.1-r1"
 RDEPEND="${DEPEND}
+	dev-libs/libcgroup
 	maui? ( sys-cluster/maui[slurm] )"
 
 REQUIRED_USE="torque? ( perl )"
