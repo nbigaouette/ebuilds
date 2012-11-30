@@ -18,7 +18,7 @@ else
 	fi
 	MY_P="${PN}-${MY_PV}"
 	INHERIT_GIT=""
-	SRC_URI="http://www.schedmd.com/download/latest/${MY_P}.tar.bz2 http://www.schedmd.com/download/development/${MY_P}.tar.bz2 http://www.schedmd.com/download/archive/${MY_P}.tar.bz2"
+	SRC_URI="http://www.schedmd.com/download/total/${MY_P}.tar.bz2"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${MY_P}"
 fi
