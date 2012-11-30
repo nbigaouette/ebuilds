@@ -18,7 +18,7 @@ else
 	fi
 	MY_P="${PN}-${MY_PV}"
 	INHERIT_GIT=""
-	SRC_URI="http://www.schedmd.com/download/latest/${MY_P}.tar.bz2 http://www.schedmd.com/download/development/${MY_P}.tar.bz2 http://www.schedmd.com/download/archive/${MY_P}.tar.bz2"
+	SRC_URI="http://www.schedmd.com/download/total/${MY_P}.tar.bz2"
 	KEYWORDS="~amd64 ~x86"
 	S="${WORKDIR}/${MY_P}"
 fi
@@ -26,7 +26,7 @@ fi
 inherit eutils pam perl-module ${INHERIT_GIT}
 
 DESCRIPTION="SLURM: A Highly Scalable Resource Manager"
-HOMEPAGE="https://computing.llnl.gov/linux/slurm/"
+HOMEPAGE="http://www.schedmd.com"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -35,6 +35,7 @@ IUSE="lua maui multiple-slurmd +munge mysql pam perl postgres ssl static-libs to
 DEPEND="
 	!sys-cluster/torque
 	!net-analyzer/slurm
+	!net-analyzer/sinfo
 	mysql? ( dev-db/mysql )
 	munge? ( sys-auth/munge )
 	ypbind? ( net-nds/ypbind )
@@ -45,6 +46,7 @@ DEPEND="
     !lua? ( !dev-lang/lua )
 	>=sys-apps/hwloc-1.1.1-r1"
 RDEPEND="${DEPEND}
+	dev-libs/libcgroup
 	maui? ( sys-cluster/maui[slurm] )"
 
 REQUIRED_USE="torque? ( perl )"
@@ -52,7 +54,7 @@ REQUIRED_USE="torque? ( perl )"
 LIBSLURM_PERL_S="${WORKDIR}/${P}/contribs/perlapi/libslurm/perl"
 LIBSLURMDB_PERL_S="${WORKDIR}/${P}/contribs/perlapi/libslurmdb/perl"
 
-RESTRICT="mirror"
+RESTRICT="primaryuri"
 
 src_unpack() {
 	if [[ ${PV} == *9999* ]]; then
