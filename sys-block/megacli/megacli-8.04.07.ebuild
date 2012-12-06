@@ -42,8 +42,13 @@ src_unpack () {
 src_install() {
     insinto /opt/MegaRAID/MegaCli
     insopts -m0755
-    use x86 ?   && doins opt/MegaRAID/MegaCli/MegaCli
-    use amd64 ? && doins opt/MegaRAID/MegaCli/MegaCli64
+    if use x86; then
+        doins opt/MegaRAID/MegaCli/MegaCli
+        dosym /opt/MegaRAID/MegaCli/MegaCli /usr/bin/megacli
+    elif use amd64; then
+        doins opt/MegaRAID/MegaCli/MegaCli64
+        dosym /opt/MegaRAID/MegaCli/MegaCli64 /usr/bin/megacli
+    fi
     insopts -m0444
     doins opt/MegaRAID/MegaCli/libstorelibir*.so*
 }
