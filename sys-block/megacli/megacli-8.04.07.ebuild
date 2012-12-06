@@ -27,9 +27,9 @@ QA_PRESTRIPPED="
 S="${WORKDIR}"
 
 pkg_nofetch () {
-    einfo "Please visit http://www.lsi.com/search/Pages/downloads.aspx"
-    einfo "then search and download ${PV}_MegaCLI.zip"
-    einfo "Place the file in ${DISTDIR}"
+    ewarn "Please visit http://www.lsi.com/search/Pages/downloads.aspx"
+    ewarn "then search and download ${PV}_MegaCLI.zip"
+    ewarn "Place the file in ${DISTDIR}"
 }
 
 src_unpack () {
@@ -48,8 +48,8 @@ src_install() {
     doins opt/MegaRAID/MegaCli/libstorelibir*.so*
 }
 
-post_install() {
-    einfo "For usage, please refer to the \"MegaRAID SAS Software User Guide\"."
-    einfo "You can download it by visiting http://www.lsi.com/search/Pages/downloads.aspx"
-    einfo "and searching for it."
+pkg_postinst() {
+    elog "For usage, please refer to the \"MegaRAID SAS Software User Guide\"."
+    elog "You can download it by visiting http://www.lsi.com/search/Pages/downloads.aspx"
+    elog "and searching for it."
 }
