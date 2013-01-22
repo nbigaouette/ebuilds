@@ -56,21 +56,21 @@ src_prepare() {
             -i Make.inc || die "Can't sed."
 
         # https://github.com/JuliaLang/julia/issues/450
-        mkdir -p ${WORKDIR}/${P}/external/root/lib || die "Can't creat external/root/lib folder."
-        ln -s /$(get_libdir)/libpcre.so.0 ${WORKDIR}/${P}/external/root/lib/libpcre.so || die "Can't add symbolic link to pcre"
+        mkdir -p ${WORKDIR}/${P}/deps/root/lib || die "Can't creat deps/root/lib folder."
+        ln -s /$(get_libdir)/libpcre.so.0 ${WORKDIR}/${P}/deps/root/lib/libpcre.so || die "Can't add symbolic link to pcre"
 
         # Folder /usr/include/suitesparse does not exists, everything should be in /usr/include
-        sed -e "s|SUITESPARSE_INC = -I /usr/include/suitesparse|SUITESPARSE_INC =|g" -i external/Makefile
+        sed -e "s|SUITESPARSE_INC = -I /usr/include/suitesparse|SUITESPARSE_INC =|g" -i deps/Makefile
     fi
 }
 
 src_compile() {
-    cd external || die "Could not enter 'external' directory!"
+    cd deps || die "Could not enter 'deps' directory!"
 
     # Create libsuitesparse.{so,a} from all sci-libs/suitesparse different libraries
     if use builtin; then
-        LIBLAPACK=external/lapack-*/liblapack.a
-        LIBBLAS=external/openblas-*/libopenblas.a
+        LIBLAPACK=deps/lapack-*/liblapack.a
+        LIBBLAS=deps/openblas-*/libopenblas.a
     else
         LIBLAPACK=-llapack
         LIBBLAS=-lblas
@@ -86,7 +86,7 @@ src_compile() {
             /usr/$(get_libdir)/libcolamd.so \
             /usr/$(get_libdir)/libbtf.so \
             /usr/$(get_libdir)/libufconfig.so \
-        ${LIBLAPACK} ${LIBBLAS} -lstdc++ -o ${WORKDIR}/${P}/external/root/lib/libsuitesparse.so
+        ${LIBLAPACK} ${LIBBLAS} -lstdc++ -o ${WORKDIR}/${P}/deps/root/lib/libsuitesparse.so
 
     cd ${S} || die "Can't cd into ${S}!"
     emake
