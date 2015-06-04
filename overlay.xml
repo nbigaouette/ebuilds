@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <layman>
-    <overlay name="nbigaouette" status="unofficial" contact="nbigaouette+ebuilds@gmail.com" type="git" src="git://github.com/nbigaouette/ebuilds.git">
+    <overlay name="nbigaouette" status="unofficial" contact="nbigaouette@gmail.com" type="git" src="git://github.com/nbigaouette/ebuilds.git">
         <link>https://github.com/nbigaouette/ebuilds/</link>
         <description>Nicolas Bigaouette's ebuilds</description>
     </overlay>
